@@ -55,8 +55,20 @@ app.use(function (err, req, res, next) {
     console.log("Error producido: " + err);
     if (!res.headersSent) {
         res.status(400);
-        res.redirect("/views");
+        var respuesta = swig.renderFile('views/error.html', {
+            error: "Error 400",
+            mensaje: err
+        });
+        res.send(respuesta);
     }
+});
+
+app.get('*', function(req, res){
+    var respuesta = swig.renderFile('views/error.html', {
+        error: "Error 404 Page not found",
+        mensaje: "La página "+req.url+" no existe"
+    });
+    res.send(respuesta);
 });
 
 
