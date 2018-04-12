@@ -27,3 +27,39 @@ app.set('port', 8081);
 app.set('db', 'mongodb://sdi:EIISDI2018$@ds245478.mlab.com:45478/redsocial');
 app.set('clave', 'abcdefg');
 app.set('crypto', crypto);
+
+//==========INICIACION=============
+//gestorBD.init(app,mongo);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static('public'));
+app.use(fileUpload());
+app.use(expressSession({
+    secret: 'abcdefg',
+    resave: true,
+    saveUninitialized: true
+}));
+
+
+//==========RUTA================
+app.get('/', function (req, res) {
+    res.send("Esta es la red Social");
+});
+
+//=========ERRORES==============
+app.use(function (err, req, res, next) {
+    console.log("Error producido: " + err);
+    if (!res.headersSent) {
+        res.status(400);
+        res.send("Recurso no disponible");
+    }
+});
+
+
+//===========RUN===============
+// Lanza el servidor
+app.listen(app.get('port'), function() {
+  console.log("Autores: Antonio Paya Gonzalez y Pablo Diaz Rancaño");
+  console.log("Servidor activo en el puerto: 8081");
+});
