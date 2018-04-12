@@ -42,10 +42,12 @@ app.use(expressSession({
 }));
 
 
-//==========RUTA================
+//==========RUTAS================
 app.get('/', function (req, res) {
     res.send("Esta es la red Social");
 });
+
+require("./routes/rusuarios.js")(app, swig);
 
 //=========ERRORES==============
 app.use(function (err, req, res, next) {

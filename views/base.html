@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- HEAD -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS-->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <!-- Font-awesome-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>{% block titulo %} RedSocial {% endblock %}</title>
+</head>
+<body class="app sidebar-mini">
+
+{% block nav %}
+<!-- Nav-->
+<nav>
+    <header class="app-header">
+        <a class="app-header__logo" href="/">Red Social</a>
+        <!-- Sidebar toggle button-->
+        <a class="app-sidebar__toggle" href="#" data-toggle="sidebar"></a>
+        <!-- Nav Right Menu-->
+        <ul class="app-nav">
+            <li class="app-search">
+                <form action="/">
+                    <input class="app-search__input" type="search" name="searchText"
+                           placeholder="buscarPost">
+                    <button class="app-search__button" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </form>
+
+            </li>
+            <!-- Lenguaje Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#"
+                                    data-toggle="dropdown"><i class="fa fa-globe fa-lg"></i> Idioma</a>
+                <ul id="languageDropdownMenuButton" class="dropdown-menu settings-menu dropdown-menu-right">
+                    <li><a class="dropdown-item" id="btnEnglish" value="EN"><img
+                            src="/img/en.png" style="border: 0; float: left; margin-right: 15px" weight="24px" height="24px"/>
+                        <button class="btn btn-outline-primary btn-sm">Inglés</button>
+                    </a></li>
+                    <li><a class="dropdown-item" id="btnSpanish" value="ES"><img
+                            src="/img/es.png"
+                            style="border: 0; float: left; margin-right: 15px" weight="24px" height="24px"/>
+                        <button class="btn btn-outline-primary btn-sm">Español</button>
+                    </a></li>
+                </ul>
+            </li>
+            <!-- User Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#"
+                                    data-toggle="dropdown"><i class="fa fa-user fa-lg"></i> Perfil</a>
+                <ul class="dropdown-menu settings-menu dropdown-menu-right">
+                    <li><a class="dropdown-item" href="#"><i
+                            class="fa fa-user fa-lg"></i> Perfil </a></li>
+                    <li><a class="dropdown-item" href="/logout" id="logout"><i
+                            class="fa fa-sign-out fa-lg"></i> Cerrar sesion </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
+        <div class="app-sidebar__user">
+            <img class="app-sidebar__user-avatar"
+                 src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                 alt="User Image" width="48" height="48">
+            <div>
+                <p class="app-sidebar__user-name">Username</p>
+                <p class="app-sidebar__user-name">Nombre</p>
+                <p class="app-sidebar__user-designation">Apellidos</p>
+            </div>
+        </div>
+        <ul class="app-menu">
+            <li><a class="app-menu__item" href="/"><i
+                    class="app-menu__icon fa fa-dashboard"></i><span
+                    class="app-menu__label">Panel</span></a></li>
+            <li class="treeview"><a id="posts" class="app-menu__item" href="#"
+                                    data-toggle="treeview"><i class="app-menu__icon fa fa-edit"></i><span
+                    class="app-menu__label">Mis post</span><i
+                    class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu" id="desplieguePosts">
+                    <li><a class="treeview-item" href="/post/add"><i
+                            class="icon fa fa-circle-o"></i> Crear post </a></li>
+                    <li><a class="treeview-item" href="/post/list"><i
+                            class="icon fa fa-circle-o"></i> Listar mis post </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview"><a id="usuarios" class="app-menu__item" href="#"
+                                    data-toggle="treeview"><i class="app-menu__icon fa fa-users"></i><span
+                    class="app-menu__label">Usuarios</span><i
+                    class="treeview-indicator fa fa-angle-right"></i></a>
+                <ul class="treeview-menu" id="despliegueUsuarios">
+                    <li><a class="treeview-item" href="/users/lista-usuarios"><i
+                            class="icon fa fa-circle-o"></i> Todos usuarios</a>
+                    </li>
+                    <li><a class="treeview-item" href="/users/lista-amigos"><i
+                            class="icon fa fa-circle-o"></i> Amigos </a></li>
+                    <li><a class="treeview-item" href="/users/lista-peticiones"><i
+                            class="icon fa fa-circle-o"></i> Peticiones </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+</nav>
+{% endblock %}
+
+
+{% block contenido_principal %}
+    <!-- Contenido -->
+{% endblock %}
+
+<!-- JS -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/plugins/pace.min.js"></script>
+<script src="js/languajes.js"></script>
+{% block scripts %} {% endblock %}
+</body>
+</html>
