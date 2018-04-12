@@ -98,6 +98,6 @@ module.exports = function (app, swig, gestorDB) {
      */
     app.get("/logout", function (req, res) {
         req.session.usuario = null;
-        res.send("Usuario desconectado");
+        res.redirect("/login?mensaje=Te has desconectado");
     });
 };
