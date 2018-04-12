@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<!-- HEAD -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS-->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <!-- Font-awesome-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- JS -->
+    <script src="/js/jquery-3.2.1.min.js"></script>
+
+    <title>Login - RedSocial</title>
+</head>
+<body>
+
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+
+<section class="login-content">
+    <div class="logo">
+        <h1>Red Social</h1>
+    </div>
+
+    <div class="login-box">
+        <form class="login-form" method="post" action="/login">
+            <h3 class="login-head">
+                <i class="fa fa-lg fa-fw fa-user"></i><span> Login</span>
+            </h3>
+
+            <div class="form-group">
+                <label class="control-label">Usuario o email</label>
+                <input id="iusername" class="form-control" type="text" placeholder="Usuario"
+                       name="username" required="true" autofocus>
+                <div class="form-control-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Password</label>
+                <input id="ipasswd" class="form-control" type="password" placeholder="Password"
+                       name="password" required="true">
+                <div class="form-control-feedback"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="utility">
+                    <p class="semibold-text mb-2">
+                        <a id="registro" href="/registro" data-toggle="flip">¿No tienes cuenta?
+                            Registrate aquí</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-group btn-container">
+                <button class="btn btn-primary btn-block" type="submit">
+                    <i class="fa fa-sign-in fa-lg fa-fw"></i><span>Login</span>
+                </button>
+            </div>
+
+            <input type="hidden" name="${_csrf.parameterName}"
+                   value="${_csrf.token}"/>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+</body>
+<!-- JS -->
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/plugins/pace.min.js"></script>
+<script src="/js/plugins/bootstrap-notify.min.js"></script>
+
+<script>
+    var mensaje = getUrlParameter('mensaje');
+    var tipoMensaje = getUrlParameter('tipoMensaje');
+    if (mensaje != "") {
+        if (tipoMensaje == "") {
+            tipoMensaje = 'alert-info';
+            $.notify({
+                title: "",
+                message: mensaje,
+                icon: 'fa fa-check'
+            },{
+                type: "info"
+            });
+        }else{
+            $("#iusername").addClass('is-invalid');
+            $("#ipasswd").addClass('is-invalid');
+            $.notify({
+                title: "Error en el Login: ",
+                message: mensaje,
+                icon: 'fa fa-error'
+            },{
+                type: "danger"
+            });
+        }
+
+
+    }
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+</script>
+
+</html>

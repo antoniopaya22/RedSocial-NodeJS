@@ -29,7 +29,7 @@ app.set('clave', 'abcdefg');
 app.set('crypto', crypto);
 
 //==========INICIACION=============
-//gestorBD.init(app,mongo);
+gestorDB.init(app,mongo,gestorDB);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -48,7 +48,7 @@ app.get('/', function (req, res) {
     res.send(respuesta);
 });
 
-//require("./routes/rusuarios.js")(app, swig);
+require("./routes/rusuarios.js")(app, swig, gestorDB);
 
 //=========ERRORES==============
 app.use(function (err, req, res, next) {

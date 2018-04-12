@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<!-- HEAD -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS-->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <!-- Font-awesome-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- JS -->
+    <script src="/js/jquery-3.2.1.min.js"></script>
+
+    <title>Registro - RedSocial</title>
+</head>
+<body>
+
+<section class="material-half-bg">
+    <div class="cover"></div>
+</section>
+
+<section class="login-content">
+    <div class="logo">
+        <h1>Red Social</h1>
+    </div>
+
+    <div class="login-box">
+        <form class="login-form" method="post" action="/registro">
+            <h3 class="login-head">
+                <i class="fa fa-lg fa-fw fa-user"></i><span>Regístrate</span>
+            </h3>
+
+            <div class="form-group">
+                <label class="control-label">Usuario</label>
+                <input class="form-control" type="text" id="usuario" placeholder="Usuario" autofocus
+                       name="username" required="true">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Email</label>
+                <input class="form-control" id="email" type="email" placeholder="Email" autofocus
+                       name="email" required="true">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Password</label>
+                <input class="form-control" id="pass" type="password" placeholder="Password"
+                       name="password" required="true">
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Repite Password</label>
+                <input class="form-control" id="rep_pass" type="password" placeholder="Password"
+                       name="passwordConfirm" required="true">
+            </div>
+
+            <div class="form-group btn-container">
+                <button id="registro" class="btn btn-primary btn-block" type="submit">
+                    <i class="fa fa-sign-in fa-lg fa-fw"></i><span>Registro</span>
+                </button>
+            </div>
+
+        </form>
+
+
+    </div>
+
+</section>
+
+</body>
+<!-- JS -->
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/plugins/pace.min.js"></script>
+<script src="/js/plugins/bootstrap-notify.min.js"></script>
+
+<script>
+    var mensaje = getUrlParameter('mensaje');
+    var tipoMensaje = getUrlParameter('tipoMensaje');
+    var tipoError = getUrlParameter('tipoError');
+    if (mensaje != "") {
+        if (tipoMensaje == "") {
+            tipoMensaje = 'alert-info';
+        }
+        if (tipoError == "repe"){
+            $("#usuario").addClass('is-invalid');
+            $("#email").addClass('is-invalid');
+        }
+        if (tipoError == "pass"){
+            $("#pass").addClass('is-invalid');
+            $("#rep_pass").addClass('is-invalid');
+        }
+
+        $.notify({
+            title: "Error en el registro : ",
+            message: mensaje,
+            icon: 'fa fa-error'
+        },{
+            type: "danger"
+        });
+    }
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+</script>
+
+</html>
