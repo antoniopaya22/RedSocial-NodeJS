@@ -44,17 +44,18 @@ app.use(expressSession({
 
 //==========RUTAS================
 app.get('/', function (req, res) {
-    res.send("Esta es la red Social");
+    var respuesta = swig.renderFile('views/bpanel.html', {});
+    res.send(respuesta);
 });
 
-require("./routes/rusuarios.js")(app, swig);
+//require("./routes/rusuarios.js")(app, swig);
 
 //=========ERRORES==============
 app.use(function (err, req, res, next) {
     console.log("Error producido: " + err);
     if (!res.headersSent) {
         res.status(400);
-        res.send("Recurso no disponible");
+        res.redirect("/views");
     }
 });
 

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block titulo %} Panel - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+
+<!-- Contenido -->
+<main class="app-content"> <!-- Titulo-Cabecera -->
+    <div class="app-title">
+        <div>
+            <h1>
+                <i class="fa fa-dashboard"></i> Panel
+            </h1>
+            <p>Aquí puedes ver todos los post</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#" >Panel</a></li>
+        </ul>
+    </div>
+
+    <!--Amigos, Likes, Comentarios, Post-->
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small primary coloured-icon">
+                <i class="icon fa fa-users fa-3x"></i>
+                <div class="info">
+                    <h4>Amigos</h4>
+                    <p>
+                        <b>5</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small info coloured-icon">
+                <i class="icon fa fa-thumbs-o-up fa-3x"></i>
+                <div class="info">
+                    <h4>Likes</h4>
+                    <p>
+                        <b>25</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small warning coloured-icon">
+                <i class="icon fa fa-file fa-3x"></i>
+                <div class="info">
+                    <h4>Post</h4>
+                    <p>
+                        <b>10</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small danger coloured-icon">
+                <i class="icon fa fa-comment fa-3x"></i>
+                <div class="info">
+                    <h4>Comentarios</h4>
+                    <p>
+                        <b>500</b>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Buscar Publicaciones</h2>
+        </div>
+        <div class="col-md-8">
+            <form class="navbar-form" action="/">
+                <div class="sender row">
+                    <div class="col-md-6">
+                        <input name="searchText" type="text" class="form-control" size="80"
+                               placeholder="BuscarTitulo">
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-lg fa-fw fa fa-search"></i>
+                            <span>Buscar</span></button>
+                        <button class="btn btn-secondary" href="#">Resetear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <!-- Post -->
+    <div class="row user">
+        <!-- PONER FOREACH -->
+        <!-- POST 1-->
+        <div class="col-md-6">
+            <div class="timeline-post">
+                <div class="post-media">
+                    <a href="#"><img
+                            src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" width="48" height="48"></a>
+                    <div class="content">
+                        <h5>
+                            <a href="#">John Doe</a>
+                        </h5>
+                        <p class="text-muted">
+                            <small>2 January at 9:30</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <h4>Post 1</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        Ut enim ad minim veniam, quis tion ullamco laboris nisi ut aliquip
+                        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                        officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <!-- Imagen del post
+                <img
+                     style="height: 200px; width: 400px; display: block;"
+                     src="post.imagen"
+                     alt="Imagen del post">
+                -->
+                <ul class="post-utility">
+                    <!-- Si no dio like -->
+                    <li class="likes"><a href="#"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
+                    <!-- Si dio like
+                    <li class="likes"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
+                            <span>Te gusta este post</span></li>
+                     -->
+                    <li class="shares"><a href="#"><i
+                            class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
+                    </li>
+                    <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
+                        <span>Comentarios</span></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+
+{% endblock %}
