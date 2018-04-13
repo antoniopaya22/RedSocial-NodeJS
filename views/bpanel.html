@@ -75,10 +75,10 @@
             <h2>Buscar Publicaciones</h2>
         </div>
         <div class="col-md-8">
-            <form class="navbar-form" action="/">
+            <form class="navbar-form" method="get" action="/panel">
                 <div class="sender row">
                     <div class="col-md-6">
-                        <input name="searchText" type="text" class="form-control" size="80"
+                        <input name="busqueda" type="text" class="form-control" size="80"
                                placeholder="BuscarTitulo">
                     </div>
                     <div class="col-md-6">
@@ -95,38 +95,41 @@
 
     <!-- Post -->
     <div class="row user">
-        <!-- PONER FOREACH -->
+        {% for p in post %}
         <!-- POST 1-->
         <div class="col-md-6">
             <div class="timeline-post">
                 <div class="post-media">
-                    <a href="#"><img
-                            src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" width="48" height="48"></a>
+                    {% if p.autor.foto_perfil != "" %}
+                        <a href="#">
+                            <img src="{{ p.autor.foto_perfil }}"
+                                 width="48" height="48">
+                        </a>
+                    {% else %}
+                        <a href="#">
+                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                 width="48" height="48">
+                        </a>
+                    {% endif %}
+
                     <div class="content">
                         <h5>
-                            <a href="#">John Doe</a>
+                            <a href="#">{{ p.autor.username }}</a>
                         </h5>
                         <p class="text-muted">
-                            <small>2 January at 9:30</small>
+                            <small>{{ p.fecha.getDate() }}/{{ p.fecha.getMonth() }}/{{ p.fecha.getFullYear() }}</small>
                         </p>
                     </div>
                 </div>
                 <div class="post-content">
-                    <h4>Post 1</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis tion ullamco laboris nisi ut aliquip
-                        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                        officia deserunt mollit anim id est laborum.</p>
+                    <h4>{{ p.titulo }}</h4>
+                    <p>{{ p.contenido }}</p>
                 </div>
-                <!-- Imagen del post
-                <img
-                     style="height: 200px; width: 400px; display: block;"
-                     src="post.imagen"
-                     alt="Imagen del post">
-                -->
+                {% if p.tiene_foto %}
+                    <img style="height: 200px; width: 400px; display: block;"
+                        src="/img/post/{{ p._id.toString() }}.png"
+                        alt="Imagen del post">
+                {% endif %}
                 <ul class="post-utility">
                     <!-- Si no dio like -->
                     <li class="likes"><a href="#"><i
@@ -144,7 +147,38 @@
                 </ul>
             </div>
         </div>
+        {% endfor %}
 
+    </div>
+
+    <!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+    <div class="row text-center">
+        <ul class="pagination">
+            <!-- Primera -->
+            <li class="page-item">
+                <a class="page-link" href="/panel?pg=1">Primera</a>
+            </li>
+            <!-- Anterior (si la hay ) -->
+            {% if pgActual-1 >= 1 %}
+            <li class="page-item">
+                <a class="page-link" href="/panel?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+            </li>
+            {% endif %}
+            <!-- Actual -->
+            <li class="page-item active">
+                <a class="page-link" href="/panel?pg={{ pgActual }}">{{ pgActual }}</a>
+            </li>
+            <!-- Siguiente (si la hay) -->
+            {% if pgActual+1 <= pgUltima %}
+            <li class="page-item">
+                <a class="page-link" href="/panel?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+            </li>
+            {% endif %}
+            <!-- Última -->
+            <li class="page-item">
+                <a class="page-link" href="/panel?pg={{ pgUltima }}">Última</a>
+            </li>
+        </ul>
     </div>
 
 </main>

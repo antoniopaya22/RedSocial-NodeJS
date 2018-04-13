@@ -54,11 +54,11 @@
              } else {
                  var collection = db.collection('usuarios');
                  collection.count(function (err, count) {
-                     collection.find(criterio).skip((pg - 1) * 5).limit(5).toArray(function (err, canciones) {
+                     collection.find(criterio).skip((pg - 1) * 5).limit(5).toArray(function (err, post) {
                          if (err) {
                              funcionCallback(null);
                          } else {
-                             funcionCallback(canciones, count);
+                             funcionCallback(post, count);
                          }
                          db.close();
                      });
@@ -66,4 +66,58 @@
              }
          });
      },
+     addPost : function(post, funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('publicaciones');
+                 collection.insert(post, function(err, result) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(result.ops[0]._id);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     getPost : function(criterio, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('publicaciones');
+                 collection.find( criterio ).toArray(function(err, post) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(post);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     getPostPg : function(criterio, pg, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('publicaciones');
+                 collection.count(function(err, count){
+                     collection.find(criterio).skip( (pg-1)*4 ).limit( 4 )
+                         .toArray(function(err, post) {
+                             if (err) {
+                                 funcionCallback(null);
+                             } else {
+                                 funcionCallback(post, count);
+                             }
+                             db.close();
+                         });
+                 });
+             }
+         });
+     }
 };

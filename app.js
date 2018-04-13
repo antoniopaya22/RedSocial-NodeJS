@@ -64,6 +64,7 @@ app.use("/panel", routerUsuarioSession);
 //==========RUTAS================
 require("./routes/rusuarios.js")(app, swig, gestorDB);
 require("./routes/rpanel.js")(app, swig, gestorDB);
+require("./routes/rpost.js")(app, swig, gestorDB);
 
 
 app.get('/', function (req, res) {
