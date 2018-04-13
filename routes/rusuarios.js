@@ -110,14 +110,29 @@ module.exports = function (app, swig, gestorDB) {
         GET: Cerrar Sesion
      */
     app.get("/users/lista-usuarios", function (req, res) {
-        gestorDB.getUsuarios({}, function (usuarios) {
+        var criterio = {};
+        if (req.query.busqueda != null) {
+            criterio = {"nombre": {$regex: ".*" + req.query.busqueda + ".*"}};
+        }
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+
+        gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
             if (usuarios == null || usuarios.length == 0) {
                 res.redirect("/" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
                     "&tipoError=error");
             }else{
-                var respuesta = swig.renderFile('views/users/list.html', {
+                var pgUltima = total / 4;
+                if (total % 4 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+                var respuesta = swig.renderFile('views/users/blist.html', {
                     usuario : req.session.usuario,
-                    usuarios: usuarios
+                    usuarios: usuarios,
+                    pgActual: pg,
+                    pgUltima: pgUltima
                 });
                 res.send(respuesta);
             }
