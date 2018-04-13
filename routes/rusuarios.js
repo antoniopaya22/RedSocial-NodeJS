@@ -37,7 +37,7 @@ module.exports = function (app, swig, gestorDB) {
                 req.session.usuario = null;
                 res.redirect("/login" + "?mensaje=Usuario o password incorrecto" + "&tipoMensaje=alert-danger ");
             } else {
-                req.session.usuario = usuarios[0].username;
+                req.session.usuario = usuarios[0];
                 res.redirect("/");
             }
         });
@@ -63,7 +63,10 @@ module.exports = function (app, swig, gestorDB) {
         var usuario = {
             username: req.body.username,
             email: req.body.email,
-            password: seguro
+            password: seguro,
+            nombre: "",
+            foto_perfil: "",
+            apellidos: ""
         };
 
         var criterio = {
@@ -99,5 +102,25 @@ module.exports = function (app, swig, gestorDB) {
     app.get("/logout", function (req, res) {
         req.session.usuario = null;
         res.redirect("/login?mensaje=Te has desconectado");
+    });
+
+    //==========LISTAR USUARIOS=============
+
+    /*
+        GET: Cerrar Sesion
+     */
+    app.get("/users/lista-usuarios", function (req, res) {
+        gestorDB.getUsuarios({}, function (usuarios) {
+            if (usuarios == null || usuarios.length == 0) {
+                res.redirect("/" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
+                    "&tipoError=error");
+            }else{
+                var respuesta = swig.renderFile('views/users/list.html', {
+                    usuario : req.session.usuario,
+                    usuarios: usuarios
+                });
+                res.send(respuesta);
+            }
+        });
     });
 };

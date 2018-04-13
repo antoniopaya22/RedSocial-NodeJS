@@ -70,9 +70,12 @@
                  src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
                  alt="User Image" width="48" height="48">
             <div>
-                <p class="app-sidebar__user-name">Username</p>
-                <p class="app-sidebar__user-name">Nombre</p>
-                <p class="app-sidebar__user-designation">Apellidos</p>
+                {% if usuario.nombre != "" %}
+                    <p class="app-sidebar__user-name">{{ usuario.nombre }}</p>
+                    <p class="app-sidebar__user-designation">{{ usuario.username }}</p>
+                {% else %}
+                    <p class="app-sidebar__user-name">{{ usuario.username }}</p>
+                {% endif %}
             </div>
         </div>
         <ul class="app-menu">
@@ -124,5 +127,41 @@
 <script src="js/plugins/pace.min.js"></script>
 <script src="js/languajes.js"></script>
 {% block scripts %} {% endblock %}
+<script src="/js/plugins/bootstrap-notify.min.js"></script>
+
+<script>
+    var mensaje = getUrlParameter('mensaje');
+    var tipoMensaje = getUrlParameter('tipoMensaje');
+    if (mensaje != "") {
+        if (tipoMensaje == "") {
+            tipoMensaje = 'alert-info';
+            $.notify({
+                title: "",
+                message: mensaje,
+                icon: 'fa fa-check'
+            },{
+                type: "info"
+            });
+        }else if(tipoMensaje == "error"){
+            $.notify({
+                title: "Error: ",
+                message: mensaje,
+                icon: 'fa fa-error'
+            },{
+                type: "danger"
+            });
+        }
+
+
+    }
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+</script>
+
 </body>
 </html>

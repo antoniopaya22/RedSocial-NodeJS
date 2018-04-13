@@ -42,13 +42,35 @@ app.use(expressSession({
 }));
 
 
-//==========RUTAS================
-app.get('/', function (req, res) {
-    var respuesta = swig.renderFile('views/bpanel.html', {});
-    res.send(respuesta);
+//==========PERMISOS DE RUTAS=======
+
+// routerUsuarioSession
+var routerUsuarioSession = express.Router();
+routerUsuarioSession.use(function (req, res, next) {
+    if (req.session.usuario) {
+        // dejamos correr la petición
+        next();
+    } else {
+        res.redirect("/login");
+    }
 });
 
+
+//Aplicar routerUsuarioSession
+app.use("/users/*", routerUsuarioSession);
+app.use("/panel", routerUsuarioSession);
+
+
+//==========RUTAS================
 require("./routes/rusuarios.js")(app, swig, gestorDB);
+require("./routes/rpanel.js")(app, swig, gestorDB);
+
+
+app.get('/', function (req, res) {
+    res.redirect("/panel");
+});
+
+
 
 //=========ERRORES==============
 app.use(function (err, req, res, next) {

@@ -1,0 +1,106 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Usuarios - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+
+<!-- Contenido -->
+<main class="app-content">
+
+    <div class="app-title">
+        <div>
+            <h1>
+                <i class="fa fa-users"></i>
+                <span>Lista de usuarios</span>
+            </h1>
+
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Lista de usuarios</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Buscar usuarios</h2>
+        </div>
+        <div class="col-md-8">
+            <form class="navbar-form" action="/users/lista-usuarios">
+                <div class="sender row">
+                    <div class="col-md-6">
+                        <input id="buscar" name="searchText" type="text" class="form-control" size="80"
+                               placeholder="Buscar usuarios">
+                    </div>
+                    <div class="col-md-6">
+                        <button id="btn-buscar" class="btn btn-primary" type="submit"><i class="fa fa-lg fa-fw fa fa-search"></i>
+                            <span>Buscar</span></button>
+                        <button class="btn btn-secondary" href="#">Resetear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        {% for user in usuarios %}
+        <div class="col-md-12">
+            <div class="card mb-3 border-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h5>
+                                {% if usuario.nombre != "" %}
+                                    <a href="/users/perfil/{{ user.username }}">{{ user.nombre }}
+                                        {{ usuario.apellidos }}</a>
+                                {% else %}
+                                    <a href="/users/perfil/{{ user.username }}">{{ user.username }}</a>
+                                {% endif %}
+                            </h5>
+                            {% if usuario.foto_perfil != "" %}
+                                <a href="#"><img
+                                    src="{{ user.foto_perfil }}" width="48" height="48"></a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h5>Email</h5>
+                            <p>{{ user.email }}</p>
+
+                            <!-- Cuando los dos usuarios no son amigos -->
+                            <a class="alert-link" type="button"
+                               id="enviarPeticion" href="#">
+                                <button class="btn btn-outline-primary">
+                                    <span>Enviar petición de amistad a {{ user.username }}</span>
+                                </button>
+                            </a>
+
+                            <!-- Cuando se ha enviado la peticion de amistad
+                            <div class="alert alert-dismissible alert-success" >
+                                <strong>Petición de amistad enviada</strong>
+                            </div>
+                            -->
+
+                            <!-- Cuando los dos usuarios ya son amigos
+                            <div class="alert alert-dismissible alert-success">
+                                <strong>¡Qué bien!</strong> <a class="alert-link" href="'/users/perfil/' + {{user.username}}}">{{ user.username }}</a>
+                                <span> y tú sois amigos.</span>
+                            </div>
+                             -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>
+
+
+
+{% endblock %}
