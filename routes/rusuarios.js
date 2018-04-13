@@ -112,7 +112,12 @@ module.exports = function (app, swig, gestorDB) {
     app.get("/users/lista-usuarios", function (req, res) {
         var criterio = {};
         if (req.query.busqueda != null) {
-            criterio = {"nombre": {$regex: ".*" + req.query.busqueda + ".*"}};
+            criterio = {
+                $or: [
+                    {username: {$regex: ".*" + req.query.busqueda + ".*"}},
+                    {email: {$regex: ".*" + req.query.busqueda + ".*"}}
+                ]
+            };
         }
         var pg = parseInt(req.query.pg);
         if (req.query.pg == null) {
@@ -124,8 +129,8 @@ module.exports = function (app, swig, gestorDB) {
                 res.redirect("/" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
                     "&tipoError=error");
             }else{
-                var pgUltima = total / 4;
-                if (total % 4 > 0) {
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
                     pgUltima = pgUltima + 1;
                 }
                 var respuesta = swig.renderFile('views/users/blist.html', {
