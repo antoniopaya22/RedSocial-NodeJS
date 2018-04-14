@@ -58,6 +58,7 @@ routerUsuarioSession.use(function (req, res, next) {
 
 //Aplicar routerUsuarioSession
 app.use("/users/*", routerUsuarioSession);
+app.use("/post/*", routerUsuarioSession);
 app.use("/panel", routerUsuarioSession);
 
 
