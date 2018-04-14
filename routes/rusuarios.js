@@ -143,4 +143,36 @@ module.exports = function (app, swig, gestorDB) {
             }
         });
     });
+
+    /*
+        GET: Perfil
+     */
+    app.get("/users/perfil", function (req, res) {
+        var criterio = {
+            username : req.query.username
+        };
+
+        gestorDB.getUsuarios(criterio, function (usuarios) {
+            if (usuarios == null || usuarios.length == 0) {
+                res.redirect("/" + "?mensaje=No existe ese usuario" + "&tipoMensaje=alert-danger "+
+                    "&tipoError=error");
+            }else{
+                var usuario = usuarios[0];
+                gestorDB.getPost({autor : usuario.username},function(post){
+                    if(post != null){
+                        post.forEach(function(x) {
+                            x.autor = usuario;
+                        });
+                    }
+                    var respuesta = swig.renderFile('views/users/bperfil.html', {
+                        post : post,
+                        user : usuario,
+                        usuario: req.session.usuario
+                    });
+                    res.send(respuesta);
+                });
+            }
+        });
+
+    });
 };

@@ -25,9 +25,9 @@
         <!-- Nav Right Menu-->
         <ul class="app-nav">
             <li class="app-search">
-                <form action="/">
-                    <input class="app-search__input" type="search" name="searchText"
-                           placeholder="buscarPost">
+                <form  method="get" action="/panel">
+                    <input class="app-search__input" type="search" name="busqueda"
+                           placeholder="Buscar Post">
                     <button class="app-search__button" type="submit">
                         <i class="fa fa-search"></i>
                     </button>
@@ -53,7 +53,7 @@
             <li class="dropdown"><a class="app-nav__item" href="#"
                                     data-toggle="dropdown"><i class="fa fa-user fa-lg"></i> Perfil</a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
-                    <li><a class="dropdown-item" href="#"><i
+                    <li><a class="dropdown-item" href="/users/perfil/?username={{ usuario.username }}"><i
                             class="fa fa-user fa-lg"></i> Perfil </a></li>
                     <li><a class="dropdown-item" href="/logout" id="logout"><i
                             class="fa fa-sign-out fa-lg"></i> Cerrar sesion </a>
@@ -120,14 +120,14 @@
     <!-- Contenido -->
 {% endblock %}
 
+{% block scripts %}
 <!-- JS -->
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/main.js"></script>
-<script src="js/plugins/pace.min.js"></script>
-<script src="js/languajes.js"></script>
-{% block scripts %} {% endblock %}
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/plugins/pace.min.js"></script>
+<script src="/js/languajes.js"></script>
 <script src="/js/plugins/bootstrap-notify.min.js"></script>
 
 <script>
@@ -163,6 +163,7 @@
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 </script>
+{% endblock %}
 
 </body>
 </html>

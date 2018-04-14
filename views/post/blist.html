@@ -59,6 +59,10 @@
                         </div>
                     </div>
                     <div class="post-content">
+                        <div class="btn-group">
+                            <a class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></a>
+                            <a class="btn btn-primary" href="#" id="delPost"><i class="fa fa-lg fa-trash"></i></a>
+                        </div>
                         <h4>{{ p.titulo }}</h4>
                         <p>{{ p.contenido }}</p>
                     </div>
@@ -124,4 +128,70 @@
 
 
 
+{% endblock %}
+
+{% block scripts %}
+<!-- JS -->
+<script src="/js/jquery-3.2.1.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/plugins/pace.min.js"></script>
+<script src="/js/languajes.js"></script>
+<script src="/js/plugins/bootstrap-notify.min.js"></script>
+<script src="/js/plugins/sweetalert.min.js"></script>
+
+<script>
+    $('#delPost').click(function(){
+        swal({
+            title: "¿Estás seguro de borrar el post?",
+            text: "Eliminar una publicación es una acción irreversible.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Si, quiero borrarlo",
+            cancelButtonText: "No, cancela el borrado",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function(isConfirm) {
+            if (isConfirm) {
+                swal("Borrado", "La publicación ha sido eliminada", "success");
+                window.location.href = "/panel";
+            } else {
+                swal("Cancelado", "Se ha cancelado la operación", "error");
+            }
+        });
+    });
+
+    var mensaje = getUrlParameter('mensaje');
+    var tipoMensaje = getUrlParameter('tipoMensaje');
+    if (mensaje != "") {
+        if (tipoMensaje == "") {
+            tipoMensaje = 'alert-info';
+            $.notify({
+                title: "",
+                message: mensaje,
+                icon: 'fa fa-check'
+            },{
+                type: "info"
+            });
+        }else if(tipoMensaje == "error"){
+            $.notify({
+                title: "Error: ",
+                message: mensaje,
+                icon: 'fa fa-error'
+            },{
+                type: "danger"
+            });
+        }
+
+
+    }
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+</script>
 {% endblock %}
