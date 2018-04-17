@@ -61,7 +61,7 @@
                     <div class="post-content">
                         <div class="btn-group">
                             <a class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></a>
-                            <a class="btn btn-primary" href="#" id="delPost"><i class="fa fa-lg fa-trash"></i></a>
+                            <a class="btn btn-primary delPost" href="#" id="{{ p._id.toString() }}"><i class="fa fa-lg fa-trash"></i></a>
                         </div>
                         <h4>{{ p.titulo }}</h4>
                         <p>{{ p.contenido }}</p>
@@ -142,7 +142,8 @@
 <script src="/js/plugins/sweetalert.min.js"></script>
 
 <script>
-    $('#delPost').click(function(){
+    $('.delPost').click(function(){
+        var bt = $((this)).attr('id');
         swal({
             title: "¿Estás seguro de borrar el post?",
             text: "Eliminar una publicación es una acción irreversible.",
@@ -155,7 +156,10 @@
         }, function(isConfirm) {
             if (isConfirm) {
                 swal("Borrado", "La publicación ha sido eliminada", "success");
-                window.location.href = "/panel";
+                $.ajax({
+                    url: '/post/publicacion/'+bt,
+                    type: 'DELETE'
+                });
             } else {
                 swal("Cancelado", "Se ha cancelado la operación", "error");
             }

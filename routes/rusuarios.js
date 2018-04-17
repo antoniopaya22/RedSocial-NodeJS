@@ -1,11 +1,16 @@
 /**
- * Red Social
+ *     ____  ____  ____    ____   __    ___  __   __   __         ____  ____  __
+ *    (  _ \(  __)(    \  / ___) /  \  / __)(  ) / _\ (  )   ___ / ___)(    \(  )
+ *     )   / ) _)  ) D (  \___ \(  O )( (__  )( /    \/ (_/\(___)\___ \ ) D ( )(
+ *    (__\_)(____)(____/  (____/ \__/  \___)(__)\_/\_/\____/     (____/(____/(__)
  *
- * Se encarga de dar respuesta a las rutas relacionadas
- * con los usuarios de la aplicacion
- * ======================
- * @author Antonio Paya
- * @author Pablo Diaz
+ *    ===========================================================================
+ *    Se encarga de dar respuesta a las rutas relacionadas
+ *    con los usuarios de la aplicacion
+ *    ======================
+ *    @author Antonio Paya
+ *    @author Pablo Diaz
+ *
  */
 
 module.exports = function (app, swig, gestorDB) {

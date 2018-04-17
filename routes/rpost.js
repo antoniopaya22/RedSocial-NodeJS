@@ -1,14 +1,18 @@
 /**
- * Red Social
+ *     ____  ____  ____    ____   __    ___  __   __   __         ____  ____  __
+ *    (  _ \(  __)(    \  / ___) /  \  / __)(  ) / _\ (  )   ___ / ___)(    \(  )
+ *     )   / ) _)  ) D (  \___ \(  O )( (__  )( /    \/ (_/\(___)\___ \ ) D ( )(
+ *    (__\_)(____)(____/  (____/ \__/  \___)(__)\_/\_/\____/     (____/(____/(__)
  *
- * Se encarga de dar respuesta a las rutas relacionadas
- * con las publicaciones de los usuarios
- * ======================
- * @author Antonio Paya
- * @author Pablo Diaz
+ *    ===========================================================================
+ *    Se encarga de dar respuesta a las rutas relacionadas
+ *    con las publicaciones de los usuarios
+ *    ======================
+ *    @author Antonio Paya
+ *    @author Pablo Diaz
+ *
  */
-
-module.exports = function (app, swig, gestorDB) {
+module.exports = function (app, swig, gestorDB, fs) {
 
     //==========RUTAS=============
 
@@ -72,6 +76,7 @@ module.exports = function (app, swig, gestorDB) {
                         }
                     });
                 }
+                else res.redirect("/");
             }
         });
     });
@@ -97,6 +102,22 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
+    app.delete("/post/publicacion/:id", function (req, res) {
+        var criterio = {"_id": gestorDB.mongo.ObjectID(req.params.id)}
+        gestorDB.deletePost(criterio, function (post) {
+            if (post == null) {
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Se ha producido un error"
+                });
+                res.send(respuesta);
+            } else {
+                if(post.tiene_foto)
+                    fs.unlinkSync(__dirname+"/../public/img/post/"+req.params.id+".png");
+                
+            }
+        });
+    });
 
 
 };

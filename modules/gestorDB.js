@@ -1,10 +1,16 @@
 /**
- * GestorDB
+ *     ____  ____  ____    ____   __    ___  __   __   __         ____  ____  __
+ *    (  _ \(  __)(    \  / ___) /  \  / __)(  ) / _\ (  )   ___ / ___)(    \(  )
+ *     )   / ) _)  ) D (  \___ \(  O )( (__  )( /    \/ (_/\(___)\___ \ ) D ( )(
+ *    (__\_)(____)(____/  (____/ \__/  \___)(__)\_/\_/\____/     (____/(____/(__)
  *
- * Modulo que se encarga de la comunicacion con la base de datos
- * ======================
- * @author Antonio Paya
- * @author Pablo Diaz
+ *    ===========================================================================
+ *    GestorDB:
+ *      Modulo que se encarga de la comunicacion con la base de datos
+ *    ======================
+ *    @author Antonio Paya
+ *    @author Pablo Diaz
+ *
  */
  module.exports = {
     mongo: null,
@@ -116,6 +122,23 @@
                              }
                              db.close();
                          });
+                 });
+             }
+         });
+     },
+     deletePost : function(criterio, funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('publicaciones');
+                 collection.remove(criterio, function(err, result) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(result);
+                     }
+                     db.close();
                  });
              }
          });

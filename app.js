@@ -1,11 +1,16 @@
 /**
- * Red Social
+ *     ____  ____  ____    ____   __    ___  __   __   __         ____  ____  __
+ *    (  _ \(  __)(    \  / ___) /  \  / __)(  ) / _\ (  )   ___ / ___)(    \(  )
+ *     )   / ) _)  ) D (  \___ \(  O )( (__  )( /    \/ (_/\(___)\___ \ ) D ( )(
+ *    (__\_)(____)(____/  (____/ \__/  \___)(__)\_/\_/\____/     (____/(____/(__)
  *
- * Aplicacion realizada en NodeJS para la asignatura de
- * Sistemas distribuidos e internet
- * ======================
- * @author Antonio Paya
- * @author Pablo Diaz
+ *    ===========================================================================
+ *    Aplicacion realizada en NodeJS para la asignatura de
+ *    Sistemas distribuidos e internet
+ *    ======================
+ *    @author Antonio Paya
+ *    @author Pablo Diaz
+ *
  */
 
 //==========MODULOS===============
@@ -19,7 +24,6 @@ var fileUpload = require('express-fileupload');
 var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var fs = require('fs');
-var https = require('https');
 var crypto = require('crypto');
 
 //==========VARIABLES===============
@@ -65,7 +69,7 @@ app.use("/panel", routerUsuarioSession);
 //==========RUTAS================
 require("./routes/rusuarios.js")(app, swig, gestorDB);
 require("./routes/rpanel.js")(app, swig, gestorDB);
-require("./routes/rpost.js")(app, swig, gestorDB);
+require("./routes/rpost.js")(app, swig, gestorDB, fs);
 
 
 app.get('/', function (req, res) {
@@ -99,6 +103,11 @@ app.get('*', function(req, res){
 //===========RUN===============
 // Lanza el servidor
 app.listen(app.get('port'), function() {
-  console.log("Autores: Antonio Paya Gonzalez y Pablo Diaz Rancaño");
-  console.log("Servidor activo en el puerto: 8081");
+    console.log(" ____  ____  ____    ____   __    ___  __   __   __         ____  ____  __  ");
+    console.log("(  _ \\(  __)(    \\  / ___) /  \\  / __)(  ) / _\\ (  )   ___ / ___)(    \\(  ) ");
+    console.log(" )   / ) _)  ) D (  \\___ \\(  O )( (__  )( /    \\/ (_/\\(___)\\___ \\ ) D ( )(  ");
+    console.log("(__\\_)(____)(____/  (____/ \\__/  \\___)(__)\\_/\\_/\\____/     (____/(____/(__) ");
+    console.log("============================================================================");
+    console.log("Autores: Antonio Paya Gonzalez y Pablo Diaz Rancaño");
+    console.log("Servidor activo en el puerto: 8081");
 });
