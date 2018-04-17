@@ -60,8 +60,8 @@
                     </div>
                     <div class="post-content">
                         <div class="btn-group">
-                            <a class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></a>
-                            <a class="btn btn-primary delPost" href="#" id="{{ p._id.toString() }}"><i class="fa fa-lg fa-trash"></i></a>
+                            <button class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></button>
+                            <button class="btn btn-primary delPost" href="/post/list" id="{{ p._id.toString() }}"><i class="fa fa-lg fa-trash"></i></button>
                         </div>
                         <h4>{{ p.titulo }}</h4>
                         <p>{{ p.contenido }}</p>
@@ -156,9 +156,8 @@
         }, function(isConfirm) {
             if (isConfirm) {
                 swal("Borrado", "La publicación ha sido eliminada", "success");
-                $.ajax({
-                    url: '/post/publicacion/'+bt,
-                    type: 'DELETE'
+                $.post('/post/publicacion/del/'+bt, function(data, status){
+                    location.replace("/post/list?mensaje=Se ha borrado la publicación");
                 });
             } else {
                 swal("Cancelado", "Se ha cancelado la operación", "error");

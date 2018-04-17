@@ -72,11 +72,11 @@ module.exports = function (app, swig, gestorDB, fs) {
                                 mensaje: "Error al subir la foto"
                             });
                         } else {
-                            res.redirect("/");
+                            res.redirect("/panel?mensaje=Publicacion creada correctamente");
                         }
                     });
                 }
-                else res.redirect("/");
+                else res.redirect("/panel?mensaje=Publicacion creada correctamente");
             }
         });
     });
@@ -102,7 +102,7 @@ module.exports = function (app, swig, gestorDB, fs) {
         });
     });
 
-    app.delete("/post/publicacion/:id", function (req, res) {
+    app.post("/post/publicacion/del/:id", function (req, res) {
         var criterio = {"_id": gestorDB.mongo.ObjectID(req.params.id)}
         gestorDB.deletePost(criterio, function (post) {
             if (post == null) {
@@ -114,7 +114,7 @@ module.exports = function (app, swig, gestorDB, fs) {
             } else {
                 if(post.tiene_foto)
                     fs.unlinkSync(__dirname+"/../public/img/post/"+req.params.id+".png");
-                
+                res.redirect("/post/list/?mensaje=Se ha borrado la publicación");
             }
         });
     });
