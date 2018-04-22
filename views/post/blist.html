@@ -1,6 +1,6 @@
 {% extends "../base.html" %}
 
-{% block titulo %} Usuarios - RedSocial {% endblock %}
+{% block titulo %} Publicaciones - RedSocial {% endblock %}
 
 {% block contenido_principal %}
 
@@ -60,7 +60,7 @@
                     </div>
                     <div class="post-content">
                         <div class="btn-group">
-                            <button class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></button>
+                            <a class="btn btn-primary" href="/post/publicacion/edit/{{ p._id.toString() }}"><i class="fa fa-lg fa-edit"></i></a>
                             <button class="btn btn-primary delPost" href="/post/list" id="{{ p._id.toString() }}"><i class="fa fa-lg fa-trash"></i></button>
                         </div>
                         <h4>{{ p.titulo }}</h4>
@@ -156,9 +156,7 @@
         }, function(isConfirm) {
             if (isConfirm) {
                 swal("Borrado", "La publicación ha sido eliminada", "success");
-                $.post('/post/publicacion/del/'+bt, function(data, status){
-                    location.replace("/post/list?mensaje=Se ha borrado la publicación");
-                });
+                window.location.replace("/post/publicacion/del/"+bt);
             } else {
                 swal("Cancelado", "Se ha cancelado la operación", "error");
             }

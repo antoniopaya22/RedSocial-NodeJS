@@ -23,6 +23,15 @@ module.exports = function (app, swig, gestorDB, fs) {
         res.send(respuesta);
     });
 
+    app.get("/post/publicacion/edit/:id", function (req, res) {
+        var p_id = req.params.id;
+        var respuesta = swig.renderFile('views/post/bedit.html', {
+            usuario: req.session.usuario,
+            p_id: p_id
+        });
+        res.send(respuesta);
+    });
+
     app.get('/post/list', function(req, res) {
         var criterio = { autor : req.session.usuario.username };
 
@@ -43,32 +52,160 @@ module.exports = function (app, swig, gestorDB, fs) {
 
     });
 
-    //==========Publicaciones CRUD=============
+    //==========Publicaciones=============
 
+    /**
+     * ADD Publicacion
+     */
     app.post("/post/publicacion", function (req, res) {
-        var post =
-            {
-                titulo : req.body.titulo,
-                contenido : req.body.contenido,
-                fecha : new Date(),
-                autor : req.session.usuario.username,
-                tiene_foto : (req.files.foto != null)
-            };
+        var foto = req.files.foto;
 
-        gestorDB.addPost(post, function(id){
-            if (id == null) {
+        var configuracion = {
+            url: "http://localhost:8081/api/post/",
+            method: "post",
+            json: true,
+            body: {
+                titulo : req.body.titulo,
+                autor: req.session.usuario.username,
+                contenido : req.body.contenido,
+                tiene_foto : (req.files.foto != null)
+            }
+        };
+
+        var rest = app.get("rest");
+        rest(configuracion,function (error,response,body) {
+            if(error != null){
                 var respuesta = swig.renderFile('views/error.html', {
-                    error: "Error 409: Conflict",
-                    mensaje: "Error al añadir el pos"
+                    error: "Error 500",
+                    mensaje: "Error al añadir el post"
                 });
                 res.send(respuesta);
-            } else {
-                if (req.files.foto != null) {
-                    var imagen = req.files.foto;
-                    imagen.mv('public/img/post/' + id + '.png', function (err) {														   // 'public/portadas/...'
+            }else{
+                var id = body._id.toString();
+                if (foto != null) {
+                    foto.mv('public/img/post/' + id + '.png', function (err) {														   // 'public/portadas/...'
                         if (err) {
                             var respuesta = swig.renderFile('views/error.html', {
-                                error: "Error 409: Conflict",
+                                error: "Error 500",
+                                mensaje: "Error al subir la foto"
+                            });
+                        } else {
+                            res.redirect("/panel?mensaje=Publicacion creada correctamente");
+                        }
+                    });
+                }
+                else res.redirect("/panel?mensaje=Publicacion creada correctamente");
+            }
+        });
+
+    });
+
+    /**
+     * GET Publicacion
+     */
+    app.get('/post/publicacion/:id', function(req, res) {
+        var configuracion = {
+            url: "http://localhost:8081/api/post/"+req.params.id,
+            method: "get"
+        };
+        var rest = app.get("rest");
+
+        rest(configuracion,function (error,response,body) {
+            if(error != null){
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al obtener el post"
+                });
+                res.send(respuesta);
+            }else{
+                var post = JSON.parse(body);
+                var respuesta = swig.renderFile('views/post/bpost.html',
+                    {
+                        usuario: req.session.usuario,
+                        post : post
+                    });
+                res.send(respuesta);
+            }
+        });
+    });
+
+    /**
+     * DELETE Publicacion
+     */
+    app.get("/post/publicacion/del/:id", function (req, res) {
+        var configuracion = {
+            url: "http://localhost:8081/api/post/"+req.params.id,
+            method: "delete"
+        };
+
+        // Borrar la foto del post
+        gestorDB.getPost({"_id":gestorDB.mongo.ObjectID(req.params.id)},function (post) {
+            if(post[0]!=null){
+                console.log(post[0].titulo);
+                if(post[0].tiene_foto) {
+                    fs.unlinkSync(__dirname + "/../public/img/post/" + req.params.id + ".png");
+                }
+            }
+            else {
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al eliminar la foto del post"
+                });
+                res.send(respuesta);
+            }
+        });
+
+        
+        var rest = app.get("rest");
+        rest(configuracion,function (error,response,body) {
+            if(error != null){
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al eliminar el post"
+                });
+                res.send(respuesta);
+            }else{
+                res.redirect('/post/list?mensaje=Se ha borrado la publicación');
+            }
+        });
+    });
+
+    /**
+     * UDPDATE Publicacion
+     */
+    app.post("/post/publicacion/edit/:id", function (req, res) {
+        var post = {
+            titulo : req.body.titulo,
+            contenido : req.body.contenido,
+            fecha : new Date(),
+            autor : req.session.usuario.username,
+            tiene_foto : (req.files.foto != null)
+        };
+
+        var foto = req.files.foto;
+
+        var configuracion = {
+            url: "http://localhost:8081/api/post/"+req.params.id,
+            method: "put",
+            json: true,
+            body: post
+        };
+
+        var rest = app.get("rest");
+        rest(configuracion,function (error,response,body) {
+            if(error != null){
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al actualizar el post"
+                });
+                res.send(respuesta);
+            }else{
+                var id = body._id.toString();
+                if (foto != null) {
+                    foto.mv('public/img/post/' + id + '.png', function (err) {														   // 'public/portadas/...'
+                        if (err) {
+                            var respuesta = swig.renderFile('views/error.html', {
+                                error: "Error 500",
                                 mensaje: "Error al subir la foto"
                             });
                         } else {
@@ -80,44 +217,5 @@ module.exports = function (app, swig, gestorDB, fs) {
             }
         });
     });
-
-    app.get('/post/publicacion/:id', function(req, res) {
-        var criterio = { "_id" : gestorDB.mongo.ObjectID(req.params.id) };
-
-        gestorDB.getPost(criterio,function(post){
-            if ( post == null ){
-                var respuesta = swig.renderFile('views/error.html', {
-                    error: "Error 404 Page not found",
-                    mensaje: "Recurso no encontrado o no disponible"
-                });
-                res.send(respuesta);
-            } else {
-                var respuesta = swig.renderFile('views/post/bpost.html',
-                    {
-                        usuario: req.session.usuario,
-                        post : post[0]
-                    });
-                res.send(respuesta);
-            }
-        });
-    });
-
-    app.post("/post/publicacion/del/:id", function (req, res) {
-        var criterio = {"_id": gestorDB.mongo.ObjectID(req.params.id)}
-        gestorDB.deletePost(criterio, function (post) {
-            if (post == null) {
-                var respuesta = swig.renderFile('views/error.html', {
-                    error: "Error 500",
-                    mensaje: "Se ha producido un error"
-                });
-                res.send(respuesta);
-            } else {
-                if(post.tiene_foto)
-                    fs.unlinkSync(__dirname+"/../public/img/post/"+req.params.id+".png");
-                res.redirect("/post/list/?mensaje=Se ha borrado la publicación");
-            }
-        });
-    });
-
-
+    
 };

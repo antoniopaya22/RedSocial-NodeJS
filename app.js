@@ -25,12 +25,14 @@ var bodyParser = require('body-parser');
 var expressSession = require('express-session');
 var fs = require('fs');
 var crypto = require('crypto');
+var rest = require('request');
 
 //==========VARIABLES===============
 app.set('port', 8081);
 app.set('db', 'mongodb://sdi:EIISDI2018$@ds245478.mlab.com:45478/redsocial');
 app.set('clave', 'abcdefg');
 app.set('crypto', crypto);
+app.set('rest',rest);
 
 //==========INICIACION=============
 gestorDB.init(app,mongo,gestorDB);
@@ -67,6 +69,7 @@ app.use("/panel", routerUsuarioSession);
 
 
 //==========RUTAS================
+require("./routes/rapipost.js")(app,gestorDB, fs);
 require("./routes/rusuarios.js")(app, swig, gestorDB);
 require("./routes/rpanel.js")(app, swig, gestorDB);
 require("./routes/rpost.js")(app, swig, gestorDB, fs);
