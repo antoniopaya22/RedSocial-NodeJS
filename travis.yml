@@ -1,3 +1,6 @@
 language: node_js
-node_js:
-  - "stable"
+node_js: "node"
+services: mongodb
+cache:
+  directories:
+    - "node_modules"

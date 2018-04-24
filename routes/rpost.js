@@ -119,12 +119,16 @@ module.exports = function (app, swig, gestorDB, fs) {
                 res.send(respuesta);
             }else{
                 var post = JSON.parse(body);
-                var respuesta = swig.renderFile('views/post/bpost.html',
-                    {
-                        usuario: req.session.usuario,
-                        post : post
+                gestorDB.getUsuarios({}, function (usuarios) {
+                    post.autor = usuarios.find(function (y) {
+                        return y.username == post.autor;
                     });
-                res.send(respuesta);
+                    var respuesta = swig.renderFile('views/post/bpost.html', {
+                        post : post,
+                        usuario: req.session.usuario
+                    });
+                    res.send(respuesta);
+                });
             }
         });
     });

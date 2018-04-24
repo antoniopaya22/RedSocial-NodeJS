@@ -1,0 +1,177 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Publicaciones - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+
+<!-- Contenido -->
+<main class="app-content">
+
+    <div class="app-title">
+        <div>
+            <h1>
+                <i class="fa fa-comment-o"></i> <span>Comentarios</span>
+            </h1>
+            <p>Post: Titulo</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Comentarios</a></li>
+        </ul>
+    </div>
+
+    <!-- Post -->
+    <div class="row user">
+        <div class="col-md-12">
+            <div class="timeline-post">
+                <div class="post-media">
+                    {% if post.autor.foto_perfil != "" %}
+                    <a href="#">
+                        <img src="{{ post.autor.foto_perfil }}"
+                             width="48" height="48">
+                    </a>
+                    {% else %}
+                    <a href="#">
+                        <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                             width="48" height="48">
+                    </a>
+                    {% endif %}
+
+                    <div class="content">
+                        <h5>
+                            <a href="/users/perfil/?username={{ post.autor.username }}">{{ post.autor.username }}</a>
+                        </h5>
+                        <p class="text-muted">
+                            <small>{{ post.fecha.getDate() }}/{{ post.fecha.getMonth() }}/{{ post.fecha.getFullYear() }}</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="/post/publicacion/edit/{{ post._id.toString() }}"><i class="fa fa-lg fa-edit"></i></a>
+                        <button class="btn btn-primary delPost" href="/post/list" id="{{ post._id.toString() }}"><i class="fa fa-lg fa-trash"></i></button>
+                    </div>
+                    <h4>{{ post.titulo }}</h4>
+                    <p>{{ post.contenido }}</p>
+                </div>
+                {% if post.tiene_foto %}
+                <img style="height: 200px; width: 400px; display: block;"
+                     src="/img/post/{{ post._id.toString() }}.png"
+                     alt="Imagen del post">
+                {% endif %}
+                <ul class="post-utility">
+                    <!-- Si no dio like -->
+                    <li class="likes"><a href="#"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
+                    <!-- Si dio like
+                    <li class="likes"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
+                            <span>Te gusta este post</span></li>
+                     -->
+                    <li class="shares"><a href="/post/publicacion/{{ post._id.toString() }}"><i
+                            class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
+                    </li>
+                    <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
+                        <span>Comentarios</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 bs-component">
+            <!-- Comentario 1 -->
+            <div class="bs-component">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Comentario 1</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>Modal body text goes here.</p>
+                        </div>
+                        <div class="modal-header">
+                            <a href="#"><img src="#" width="48" height="48"></a>
+                            <div class="content">
+                                <h5>
+                                    <a href="#">John Doe</a>
+                                </h5>
+                                <p class="text-muted">
+                                    <small>2 January at 9:30</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div clas="col-md-12">
+            <!-- Escribir comentario -->
+            <div class="bs-component">
+                <div class="modal"
+                     style="position: relative; top: auto; right: auto; left: auto; bottom: auto; z-index: 1; display: block;">
+                    <div class="modal-dialog" role="document">
+                        <form class="modal-content" method="post" action="#">
+                            <div class="modal-header">
+                                <input class="form-control" type="text" placeholder="Titulo comentario" name="titulo"
+                                       required="true">
+                            </div>
+                            <div class="modal-body">
+								<textarea class="form-control" rows="5"
+                                          placeholder="Contenido comentario" name="contenido" required="true"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-fw fa-lg fa-check-circle"></i> <span>Enviar</span>
+                                </button>&nbsp;&nbsp;&nbsp;<a class="btn btn-secondary" href="#"><i
+                                    class="fa fa-fw fa-lg fa-times-circle"></i><span>Cancelar</span></a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+<div class="row text-center">
+    <ul class="pagination">
+        <!-- Primera -->
+        <li class="page-item">
+            <a class="page-link" href="/users/lista-usuarios?pg=1">Primera</a>
+        </li>
+        <!-- Anterior (si la hay ) -->
+        {% if pgActual-1 >= 1 %}
+        <li class="page-item">
+            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+        </li>
+        {% endif %}
+        <!-- Actual -->
+        <li class="page-item active">
+            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual }}">{{ pgActual }}</a>
+        </li>
+        <!-- Siguiente (si la hay) -->
+        {% if pgActual+1 <= pgUltima %}
+        <li class="page-item">
+            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+        </li>
+        {% endif %}
+        <!-- Última -->
+        <li class="page-item">
+            <a class="page-link" href="/users/lista-usuarios?pg={{ pgUltima }}">Última</a>
+        </li>
+    </ul>
+</div>
+</main>
+
+
+
+{% endblock %}
