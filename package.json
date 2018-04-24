@@ -4,7 +4,7 @@
   "description": "RedSocial realizada por Antonio Paya Gonzalez y Pablo Diaz Rancaño",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified! Configure in package.json\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": "",
   "keywords": [
@@ -23,5 +23,9 @@
     "mongodb": "^2.2.33",
     "request": "^2.85.0",
     "swig": "^1.4.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.1.1"
   }
 }

@@ -26,6 +26,7 @@ var expressSession = require('express-session');
 var fs = require('fs');
 var crypto = require('crypto');
 var rest = require('request');
+var execSync = require('child_process').execSync;
 
 //==========VARIABLES===============
 app.set('port', 8081);
@@ -114,3 +115,7 @@ app.listen(app.get('port'), function() {
     console.log("Autores: Antonio Paya Gonzalez y Pablo Diaz Rancaño");
     console.log("Servidor activo en el puerto: 8081");
 });
+
+//============TEST============
+
+exports.gestor = gestorDB;
