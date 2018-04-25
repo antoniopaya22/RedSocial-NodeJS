@@ -1,0 +1,89 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Panel - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+
+<!-- Contenido -->
+<main class="app-content"> <!-- Titulo-Cabecera -->
+    <div class="app-title">
+        <div>
+            <h1>
+                <i class="fa fa-dashboard"></i> Chat
+            </h1>
+            <p>Aquí puedes chatear con tus amigos</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Chat</a></li>
+        </ul>
+    </div>
+
+    <!--CHAT-->
+    <div class="row">
+        <div class="col-md-3">
+            <button class="btn btn-primary btn-lg btn-block" type="button">Mis chats</button>
+            <hr/>
+            <form class="navbar-form" method="get" action="#">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input name="busqueda" type="text" class="form-control" size="80"
+                               placeholder="Buscar chat">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary btn-sm" type="submit"><i
+                                class="fa fa-lg fa-fw fa fa-search"></i> Buscar
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+            <hr/>
+            <div class="list-group">
+                <a href="#" class="list-group-item active"><img
+                        src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                        width="48" height="48"> Usuario1 <span class="badge badge-danger">1</span></a>
+                <a href="#" class="list-group-item"><img
+                        src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                        width="48" height="48"> Usuario2</a>
+                <a href="#" class="list-group-item"><img
+                        src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                        width="48" height="48"> Usuario3</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="tile">
+                <h3 class="tile-title">Chat</h3>
+                <div class="messanger">
+                    <div class="messages">
+                        <div class="message"><img
+                                src="https://s3.amazonaws.com/uifaces/faces/twitter/tonypeterson/48.jpg">
+                            <p class="info">Hello there!<br>Good Morning</p>
+                        </div>
+                        <div class="message me"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg">
+                            <p class="info">Hi<br>Good Morning</p>
+                        </div>
+                        <div class="message"><img
+                                src="https://s3.amazonaws.com/uifaces/faces/twitter/tonypeterson/48.jpg">
+                            <p class="info">How are you?</p>
+                        </div>
+                        <div class="message me"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg">
+                            <p class="info">I'm Fine.</p>
+                        </div>
+                    </div>
+                    <div class="sender">
+                        <input type="text" placeholder="Send Message">
+                        <button class="btn btn-primary" type="button"><i class="fa fa-lg fa-fw fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+
+{% endblock %}

@@ -67,6 +67,7 @@ routerUsuarioSession.use(function (req, res, next) {
 app.use("/users/*", routerUsuarioSession);
 app.use("/post/*", routerUsuarioSession);
 app.use("/panel", routerUsuarioSession);
+app.use("/chat", routerUsuarioSession);
 
 
 //==========RUTAS================
