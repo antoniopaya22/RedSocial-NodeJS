@@ -43,14 +43,18 @@
                             <a href="/users/perfil/?username={{ post.autor.username }}">{{ post.autor.username }}</a>
                         </h5>
                         <p class="text-muted">
-                            <small>{{ post.fecha.getDate() }}/{{ post.fecha.getMonth() }}/{{ post.fecha.getFullYear() }}</small>
+                            <small>{{ post.fecha.getDate() }}/{{ post.fecha.getMonth() }}/{{ post.fecha.getFullYear()
+                                }}
+                            </small>
                         </p>
                     </div>
                 </div>
                 <div class="post-content">
                     <div class="btn-group">
-                        <a class="btn btn-primary" href="/post/publicacion/edit/{{ post._id.toString() }}"><i class="fa fa-lg fa-edit"></i></a>
-                        <button class="btn btn-primary delPost" href="/post/list" id="{{ post._id.toString() }}"><i class="fa fa-lg fa-trash"></i></button>
+                        <a class="btn btn-primary" href="/post/publicacion/edit/{{ post._id.toString() }}"><i
+                                class="fa fa-lg fa-edit"></i></a>
+                        <button class="btn btn-primary delPost" href="/post/list" id="{{ post._id.toString() }}"><i
+                                class="fa fa-lg fa-trash"></i></button>
                     </div>
                     <h4>{{ post.titulo }}</h4>
                     <p>{{ post.contenido }}</p>
@@ -72,7 +76,7 @@
                     <li class="shares"><a href="/post/publicacion/{{ post._id.toString() }}"><i
                             class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
                     </li>
-                    <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
+                    <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>{{ post.comentarios.length }}</span>
                         <span>Comentarios</span></li>
                 </ul>
             </div>
@@ -80,9 +84,8 @@
     </div>
 
     <div class="row">
+        {% for coment in post.comentarios %}
         <div class="col-md-6 bs-component">
-
-            {% for coment in post.comentarios %}
             <!-- Comentario 1 -->
             <div class="bs-component">
                 <div class="modal-dialog" role="document">
@@ -110,16 +113,18 @@
                                     <a href="#">{{ coment.autor.username }}</a>
                                 </h5>
                                 <p class="text-muted">
-                                    <small>{{ coment.fecha }}</small>
+                                    <small>{{ coment.fecha.getDate() }}/{{ coment.fecha.getMonth() }}/{{
+                                        coment.fecha.getFullYear() }}
+                                    </small>
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
 
         </div>
+        {% endfor %}
     </div>
 
 
@@ -130,14 +135,18 @@
                 <div class="modal"
                      style="position: relative; top: auto; right: auto; left: auto; bottom: auto; z-index: 1; display: block;">
                     <div class="modal-dialog" role="document">
-                        <form class="modal-content" method="post" action="#">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Envia un mensaje</h4>
+                        </div>
+                        <form class="modal-content" method="post" action="/post/comentario/{{ post._id.toString() }}">
                             <div class="modal-header">
                                 <input class="form-control" type="text" placeholder="Titulo comentario" name="titulo"
                                        required="true">
                             </div>
                             <div class="modal-body">
 								<textarea class="form-control" rows="5"
-                                          placeholder="Contenido comentario" name="contenido" required="true"></textarea>
+                                          placeholder="Contenido comentario" name="contenido"
+                                          required="true"></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-primary" type="submit">
@@ -156,7 +165,6 @@
 
 
 </main>
-
 
 
 {% endblock %}
