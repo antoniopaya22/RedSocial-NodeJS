@@ -1,0 +1,94 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Lista de amigos - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+	<!-- Contenido -->
+	<main class="app-content">
+
+	<div class="app-title">
+		<div>
+			<h1>
+				<i class="fa fa-users"></i>
+				<span>Lista de amigos</span>
+			</h1>
+			
+		</div>
+		<ul class="app-breadcrumb breadcrumb">
+			<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+			<li class="breadcrumb-item"><a href="#">Lista de amigos</a></li>
+		</ul>
+	</div>
+ 	
+ 	<div class="row">
+		<div class="col-md-4">
+			<h2>Buscar amigos</h2>
+		</div>
+		<div class="col-md-8">
+				<form class="navbar-form" action="/users/lista-amigos">
+					<div class="sender row">
+						<div class="col-md-6">
+							<input name="searchText" type="text" class="form-control" size="80"
+								placeholder="Buscar usuarios amigos">
+						</div>
+                		<div class="col-md-6">
+                			<button class="btn btn-primary" type="submit">
+                			<i class="fa fa-lg fa-fw fa fa-search"></i> <span>Buscar</span></button>
+                			<button class="btn btn-secondary" href="#">Resetear</button>
+                		</div>
+              		</div>
+				</form>
+			</div>
+		</div>
+	</div>
+ 	
+ 	<br>
+ 	
+ 	<div th:if="${#lists.isEmpty(userList)}">
+		<div class="col-md-12">
+			<div class="alert alert-warning">
+				<strong th:text="#{Usuarios.listaAmigos.sinAmigos}">�Vaya! No tienes amigos</strong>
+			</div>
+		</div>
+	</div>
+ 	
+	<div class="row" th:each="usuario : ${userList}">
+		<div class="col-md-12">
+			<div class="card mb-3 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-4">
+							<h5>
+								<a th:if="${usuario.nombre != null}" th:href="${'/users/perfil/' + usuario.username}"
+									 th:text="${usuario.nombreCompleto}">Usuario</a>
+								<a th:if="${usuario.nombre == null}" th:href="${'/users/perfil/' + usuario.username}"
+									 th:text="${usuario.username}">Usuario</a>
+							</h5>  
+							<a th:if="${usuario.foto_perfil != null}" href="#"><img
+								th:src="${usuario.foto_perfil}" width="48" height="48"></a>
+						</div>
+						<div class="col-md-8">
+							<h5>Email</h5>
+							<p th:text="${usuario.email}">Email</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<footer th:replace="fragments/pagination"/>
+	
+	</main>
+
+	<!-- JS -->
+	<script src="../js/jquery-3.2.1.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/main.js"></script>
+	<script src="../js/plugins/pace.min.js"></script>
+	<script src="../js/languajes.js"></script>
+</body>
+</html>
