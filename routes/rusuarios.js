@@ -157,40 +157,41 @@ module.exports = function (app, swig, gestorDB) {
 
                 gestorDB.getAmigosUsuario( { "_id": gestorDB.mongo.ObjectID(req.session.usuario._id) }, function(amigos){
                     if (amigos == null)
-                        res.redirect("/" + "?mensaje=Error al listar usuarios (que sean amigos)" + "&tipoMensaje=alert-danger "+
-                            "&tipoError=error");
-                    else {
+                        amigos = [];
 
-                        gestorDB.getPeticionesAmistad({ "id_enviador" : req.session.usuario._id }, function(peticiones){
-                            if (peticiones == null)
-                                res.redirect("/" + "?mensaje=Error al listar usuarios (que hayan recibido peticion)" +
-                                    "&tipoMensaje=alert-danger "+ "&tipoError=error");
-                            else
-                            {
-                                // Vamos a marcar quienes son amigos del usuario en sesión
-                                usuarios.forEach(function (usuario) {
-                                    amigos.forEach(function (usuario_amigo) {
-                                        usuario["esAmigo"] = (usuario._id.toString() === usuario_amigo.toString());
-                                    });
-
-                                    peticiones.forEach(function(peticion){
-                                        usuario["seHaEnviadoPeticion"] = (usuario._id.toString() ===
-                                            peticion.id_recibidor.toString());
-                                    });
+                    gestorDB.getPeticionesAmistad({ "id_enviador" : req.session.usuario._id }, function(peticiones){
+                        if (peticiones == null)
+                            res.redirect("/" + "?mensaje=Error al listar usuarios (que hayan recibido peticion)" +
+                                "&tipoMensaje=alert-danger "+ "&tipoError=error");
+                        else
+                        {
+                            // Vamos a marcar quienes son amigos del usuario en sesión
+                            usuarios.forEach(function (usuario) {
+                                usuario["esAmigo"] = false;
+                                usuario["seHaEnviadoPeticion"] = false;
+                                amigos.forEach(function (usuario_amigo) {
+                                    if ( (usuario._id.toString() === usuario_amigo.toString()) ) {
+                                        usuario["esAmigo"] = true;
+                                    }
                                 });
 
-                                var respuesta = swig.renderFile('views/users/blist.html', {
-                                    usuario: req.session.usuario,
-                                    usuarios: usuarios,
-                                    pgActual: pg,
-                                    pgUltima: pgUltima
+                                peticiones.forEach(function(peticion){
+                                    if ( (usuario._id.toString() === peticion.id_recibidor.toString()) ) {
+                                        usuario["seHaEnviadoPeticion"] = true;
+                                    }
                                 });
-                                res.send(respuesta);
-                            }
-                        });
-                    }
+                            });
+
+                            var respuesta = swig.renderFile('views/users/blist.html', {
+                                usuario: req.session.usuario,
+                                usuarios: usuarios,
+                                pgActual: pg,
+                                pgUltima: pgUltima
+                            });
+                            res.send(respuesta);
+                        }
+                    });
                 });
-
             }
         });
     });
