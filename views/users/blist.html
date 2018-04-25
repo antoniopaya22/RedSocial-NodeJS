@@ -73,26 +73,40 @@
                             <h5>Email</h5>
                             <p>{{ user.email }}</p>
 
-                            <!-- Cuando los dos usuarios no son amigos -->
-                            <a class="alert-link" type="button"
-                               id="enviarPeticion" href="#">
-                                <button class="btn btn-outline-primary">
-                                    <span>Enviar petición de amistad a {{ user.username }}</span>
-                                </button>
-                            </a>
+                            <!-- <a class="alert-link" type="button"
+                                   id="enviarPeticion" href="/users/enviarAmistad/{{ user._id.toString() }}">
+                                    <button class="btn btn-outline-primary">
+                                        <span>Enviar petición de amistad a {{ user.username }}</span>
+                                    </button>
+                                </a> -->
 
-                            <!-- Cuando se ha enviado la peticion de amistad
+
+                            <!-- Cuando son el mismo usuario -->
+                            {% if user._id.toString() == usuario._id.toString() %}
+
+                            {% elseif user.seHaEnviadoPeticion == true %}
+                            <!-- Cuando se ha enviado la peticion de amistad -->
                             <div class="alert alert-dismissible alert-success" >
                                 <strong>Petición de amistad enviada</strong>
                             </div>
-                            -->
 
-                            <!-- Cuando los dos usuarios ya son amigos
+                            <!-- Cuando los dos usuarios no son amigos -->
+                            {% elseif user.esAmigo == false %}
+                            <form action="/users/enviarAmistad" method="post">
+                                <input type="hidden" name="peticion" value="{{ user._id.toString() }}" />
+                                <button type="submit" class="btn btn-outline-primary">
+                                        <span>Enviar petición de amistad a {{ user.username }}</span>
+                                </button>
+                            </form>
+
+                            {% elseif user.esAmigo == true %}
+                            <!-- Cuando los dos usuarios ya son amigos -->
                             <div class="alert alert-dismissible alert-success">
-                                <strong>¡Qué bien!</strong> <a class="alert-link" href="'/users/perfil/' + {{user.username}}}">{{ user.username }}</a>
-                                <span> y tú sois amigos.</span>
+                                <strong>¡Qué bien!</strong> <a class="alert-link" href="/users/perfil/{{user.username}}">{{ user.username }}</a>
+                                <span> y tú ya sois amigos.</span>
                             </div>
-                             -->
+
+                            {% endif %}
 
                         </div>
                     </div>
@@ -100,6 +114,7 @@
             </div>
         </div>
         {% endfor %}
+
     </div>
 
     <!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
