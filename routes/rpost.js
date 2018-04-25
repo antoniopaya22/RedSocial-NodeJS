@@ -104,33 +104,23 @@ module.exports = function (app, swig, gestorDB, fs) {
      * GET Publicacion
      */
     app.get('/post/publicacion/:id', function(req, res) {
-        var configuracion = {
-            url: "http://localhost:8081/api/post/"+req.params.id,
-            method: "get"
-        };
-        var rest = app.get("rest");
+        var criterio = {"_id": gestorDB.mongo.ObjectId(req.params.id)};
 
-        rest(configuracion,function (error,response,body) {
-            if(error != null){
-                var respuesta = swig.renderFile('views/error.html', {
-                    error: "Error 500",
-                    mensaje: "Error al obtener el post"
+        gestorDB.getPost(criterio,function(post){
+            gestorDB.getUsuarios({}, function (usuarios) {
+                post.forEach(function(x) {
+                    x.autor = usuarios.find(function (y) {
+                        return y.username == x.autor;
+                    });
+                });
+                var respuesta = swig.renderFile('views/post/bpost.html', {
+                    post : post[0],
+                    usuario: req.session.usuario
                 });
                 res.send(respuesta);
-            }else{
-                var post = JSON.parse(body);
-                gestorDB.getUsuarios({}, function (usuarios) {
-                    post.autor = usuarios.find(function (y) {
-                        return y.username == post.autor;
-                    });
-                    var respuesta = swig.renderFile('views/post/bpost.html', {
-                        post : post,
-                        usuario: req.session.usuario
-                    });
-                    res.send(respuesta);
-                });
-            }
+            });
         });
+
     });
 
     /**

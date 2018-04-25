@@ -5,127 +5,128 @@
 {% block contenido_principal %}
 
 
-    <!-- Contenido -->
-    <main class="app-content">
+<!-- Contenido -->
+<main class="app-content">
 
-        <div class="app-title">
-            <div>
-                <h1>
-                    <i class="fa fa-users"></i> <span>Lista de post</span>
-                </h1>
+    <div class="app-title">
+        <div>
+            <h1>
+                <i class="fa fa-users"></i> <span>Lista de post</span>
+            </h1>
 
-            </div>
-            <ul class="app-breadcrumb breadcrumb">
-                <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-                <li class="breadcrumb-item"><a href="#">Lista de post</a></li>
-            </ul>
         </div>
-
-
-        <div class="row user">
-            {% if post == null or post.length == 0 %}
-            <div>
-                <div class="col-md-12">
-                    <div class="alert alert-warning">
-                        <strong>¡Vaya! No tienes ninguna publicacion.</strong>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            {% for p in post %}
-            <!-- POST 1-->
-            <div class="col-md-6">
-                <div class="timeline-post">
-                    <div class="post-media">
-                        {% if p.autor.foto_perfil != "" %}
-                        <a href="#">
-                            <img src="{{ p.autor.foto_perfil }}"
-                                 width="48" height="48">
-                        </a>
-                        {% else %}
-                        <a href="#">
-                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
-                                 width="48" height="48">
-                        </a>
-                        {% endif %}
-
-                        <div class="content">
-                            <h5>
-                                <a href="/users/perfil/?username={{ p.autor.username }}">{{ p.autor.username }}</a>
-                            </h5>
-                            <p class="text-muted">
-                                <small>{{ p.fecha.getDate() }}/{{ p.fecha.getMonth() }}/{{ p.fecha.getFullYear() }}</small>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        <div class="btn-group">
-                            <a class="btn btn-primary" href="/post/publicacion/edit/{{ p._id.toString() }}"><i class="fa fa-lg fa-edit"></i></a>
-                            <button class="btn btn-primary delPost" href="/post/list" id="{{ p._id.toString() }}"><i class="fa fa-lg fa-trash"></i></button>
-                        </div>
-                        <h4>{{ p.titulo }}</h4>
-                        <p>{{ p.contenido }}</p>
-                    </div>
-                    {% if p.tiene_foto %}
-                    <img style="height: 200px; width: 400px; display: block;"
-                         src="/img/post/{{ p._id.toString() }}.png"
-                         alt="Imagen del post">
-                    {% endif %}
-                    <ul class="post-utility">
-                        <!-- Si no dio like -->
-                        <li class="likes"><a href="#"><i
-                                class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
-                        <!-- Si dio like
-                        <li class="likes"><i
-                                class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
-                                <span>Te gusta este post</span></li>
-                         -->
-                        <li class="shares"><a href="/post/publicacion/{{ p._id.toString() }}"><i
-                                class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
-                        </li>
-                        <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
-                            <span>Comentarios</span></li>
-                    </ul>
-                </div>
-            </div>
-            {% endfor %}
-            {% endif %}
-        </div>
-
-
-    </main>
-
-    <!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
-    <div class="row text-center">
-        <ul class="pagination">
-            <!-- Primera -->
-            <li class="page-item">
-                <a class="page-link" href="/post/list?pg=1">Primera</a>
-            </li>
-            <!-- Anterior (si la hay ) -->
-            {% if pgActual-1 >= 1 %}
-            <li class="page-item">
-                <a class="page-link" href="/post/list?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
-            </li>
-            {% endif %}
-            <!-- Actual -->
-            <li class="page-item active">
-                <a class="page-link" href="/post/list?pg={{ pgActual }}">{{ pgActual }}</a>
-            </li>
-            <!-- Siguiente (si la hay) -->
-            {% if pgActual+1 <= pgUltima %}
-            <li class="page-item">
-                <a class="page-link" href="/post/list?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
-            </li>
-            {% endif %}
-            <!-- Última -->
-            <li class="page-item">
-                <a class="page-link" href="/post/list?pg={{ pgUltima }}">Última</a>
-            </li>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">Lista de post</a></li>
         </ul>
     </div>
+
+
+    <div class="row user">
+        {% if post == null or post.length == 0 %}
+        <div>
+            <div class="col-md-12">
+                <div class="alert alert-warning">
+                    <strong>¡Vaya! No tienes ninguna publicacion.</strong>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        {% for p in post %}
+        <!-- POST 1-->
+        <div class="col-md-6">
+            <div class="timeline-post">
+                <div class="post-media">
+                    {% if p.autor.foto_perfil != "" %}
+                    <a href="#">
+                        <img src="{{ p.autor.foto_perfil }}"
+                             width="48" height="48">
+                    </a>
+                    {% else %}
+                    <a href="#">
+                        <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                             width="48" height="48">
+                    </a>
+                    {% endif %}
+
+                    <div class="content">
+                        <h5>
+                            <a href="/users/perfil/?username={{ p.autor.username }}">{{ p.autor.username }}</a>
+                        </h5>
+                        <p class="text-muted">
+                            <small>{{ p.fecha.getDate() }}/{{ p.fecha.getMonth() }}/{{ p.fecha.getFullYear() }}</small>
+                        </p>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="btn-group">
+                        <a class="btn btn-primary" href="/post/publicacion/edit/{{ p._id.toString() }}"><i
+                                class="fa fa-lg fa-edit"></i></a>
+                        <button class="btn btn-primary delPost" href="/post/list" id="{{ p._id.toString() }}"><i
+                                class="fa fa-lg fa-trash"></i></button>
+                    </div>
+                    <h4>{{ p.titulo }}</h4>
+                    <p>{{ p.contenido }}</p>
+                </div>
+                {% if p.tiene_foto %}
+                <img style="height: 200px; width: 400px; display: block;"
+                     src="/img/post/{{ p._id.toString() }}.png"
+                     alt="Imagen del post">
+                {% endif %}
+                <ul class="post-utility">
+                    <!-- Si no dio like -->
+                    <li class="likes"><a href="#"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up"></i>Like</a></li>
+                    <!-- Si dio like
+                    <li class="likes"><i
+                            class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
+                            <span>Te gusta este post</span></li>
+                     -->
+                    <li class="shares"><a href="/post/publicacion/{{ p._id.toString() }}"><i
+                            class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
+                    </li>
+                    <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
+                        <span>Comentarios</span></li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+
 </main>
 
+<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+<div class="row text-center">
+    <ul class="pagination">
+        <!-- Primera -->
+        <li class="page-item">
+            <a class="page-link" href="/post/list?pg=1">Primera</a>
+        </li>
+        <!-- Anterior (si la hay ) -->
+        {% if pgActual-1 >= 1 %}
+        <li class="page-item">
+            <a class="page-link" href="/post/list?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+        </li>
+        {% endif %}
+        <!-- Actual -->
+        <li class="page-item active">
+            <a class="page-link" href="/post/list?pg={{ pgActual }}">{{ pgActual }}</a>
+        </li>
+        <!-- Siguiente (si la hay) -->
+        {% if pgActual+1 <= pgUltima %}
+        <li class="page-item">
+            <a class="page-link" href="/post/list?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+        </li>
+        {% endif %}
+        <!-- Última -->
+        <li class="page-item">
+            <a class="page-link" href="/post/list?pg={{ pgUltima }}">Última</a>
+        </li>
+    </ul>
+</div>
+</main>
 
 
 {% endblock %}
@@ -142,7 +143,7 @@
 <script src="/js/plugins/sweetalert.min.js"></script>
 
 <script>
-    $('.delPost').click(function(){
+    $('.delPost').click(function () {
         var bt = $((this)).attr('id');
         swal({
             title: "¿Estás seguro de borrar el post?",
@@ -153,10 +154,10 @@
             cancelButtonText: "No, cancela el borrado",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm) {
+        }, function (isConfirm) {
             if (isConfirm) {
                 swal("Borrado", "La publicación ha sido eliminada", "success");
-                window.location.replace("/post/publicacion/del/"+bt);
+                window.location.replace("/post/publicacion/del/" + bt);
             } else {
                 swal("Cancelado", "Se ha cancelado la operación", "error");
             }
@@ -172,15 +173,15 @@
                 title: "",
                 message: mensaje,
                 icon: 'fa fa-check'
-            },{
+            }, {
                 type: "info"
             });
-        }else if(tipoMensaje == "error"){
+        } else if (tipoMensaje == "error") {
             $.notify({
                 title: "Error: ",
                 message: mensaje,
                 icon: 'fa fa-error'
-            },{
+            }, {
                 type: "danger"
             });
         }

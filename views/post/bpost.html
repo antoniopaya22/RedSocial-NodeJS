@@ -81,30 +81,43 @@
 
     <div class="row">
         <div class="col-md-6 bs-component">
+
+            {% for coment in post.comentarios %}
             <!-- Comentario 1 -->
             <div class="bs-component">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Comentario 1</h5>
+                            <h5 class="modal-title">{{ coment.titulo }}</h5>
                         </div>
                         <div class="modal-body">
-                            <p>Modal body text goes here.</p>
+                            <p>{{ coment.contenido }}</p>
                         </div>
                         <div class="modal-header">
-                            <a href="#"><img src="#" width="48" height="48"></a>
+                            {% if post.autor.foto_perfil != "" %}
+                            <a href="#">
+                                <img src="{{ coment.autor.foto_perfil }}"
+                                     width="48" height="48">
+                            </a>
+                            {% else %}
+                            <a href="#">
+                                <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                     width="48" height="48">
+                            </a>
+                            {% endif %}
                             <div class="content">
                                 <h5>
-                                    <a href="#">John Doe</a>
+                                    <a href="#">{{ coment.autor.username }}</a>
                                 </h5>
                                 <p class="text-muted">
-                                    <small>2 January at 9:30</small>
+                                    <small>{{ coment.fecha }}</small>
                                 </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {% endfor %}
 
         </div>
     </div>
@@ -141,35 +154,7 @@
 
 </main>
 
-<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
-<div class="row text-center">
-    <ul class="pagination">
-        <!-- Primera -->
-        <li class="page-item">
-            <a class="page-link" href="/users/lista-usuarios?pg=1">Primera</a>
-        </li>
-        <!-- Anterior (si la hay ) -->
-        {% if pgActual-1 >= 1 %}
-        <li class="page-item">
-            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
-        </li>
-        {% endif %}
-        <!-- Actual -->
-        <li class="page-item active">
-            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual }}">{{ pgActual }}</a>
-        </li>
-        <!-- Siguiente (si la hay) -->
-        {% if pgActual+1 <= pgUltima %}
-        <li class="page-item">
-            <a class="page-link" href="/users/lista-usuarios?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
-        </li>
-        {% endif %}
-        <!-- Última -->
-        <li class="page-item">
-            <a class="page-link" href="/users/lista-usuarios?pg={{ pgUltima }}">Última</a>
-        </li>
-    </ul>
-</div>
+
 </main>
 
 

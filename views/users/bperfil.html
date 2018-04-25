@@ -15,15 +15,17 @@
             <div class="profile">
                 <div class="info">
                     {% if user.foto_perfil != "" %}
-                        <img class="user-img" src="${user.foto_perfil}" width="128" height="128">
+                    <img class="user-img" src="${user.foto_perfil}" width="128" height="128">
                     {% else %}
-                        <img class="user-img" src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" width="128" height="128">
+                    <img class="user-img"
+                         src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                         width="128" height="128">
                     {% endif %}
 
                     {% if user.nombre != "" %}
-                        <h4>{{ user.nombre }}</h4>
+                    <h4>{{ user.nombre }}</h4>
                     {% else %}
-                        <h4>{{ user.username }}</h4>
+                    <h4>{{ user.username }}</h4>
                     {% endif %}
                     <p>{{ user.apellidos }}</p>
                 </div>
@@ -41,9 +43,9 @@
                     <li class="nav-item"><a class="nav-link active"
                                             href="#user-timeline" data-toggle="tab">Publicaciones</a></li>
                     {% if usuario.username == user.username %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#user-settings" data-toggle="tab">Editar datos personales</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#user-settings" data-toggle="tab">Editar datos personales</a>
+                    </li>
                     {% endif %}
                 </ul>
             </div>
@@ -83,15 +85,19 @@
                                     <a href="#">{{ p.autor.username }}</a>
                                 </h5>
                                 <p class="text-muted">
-                                    <small>{{ p.fecha.getDate() }}/{{ p.fecha.getMonth() }}/{{ p.fecha.getFullYear() }}</small>
+                                    <small>{{ p.fecha.getDate() }}/{{ p.fecha.getMonth() }}/{{ p.fecha.getFullYear()
+                                        }}
+                                    </small>
                                 </p>
                             </div>
                         </div>
                         <div class="post-content">
                             <div class="btn-group">
                                 {% if usuario.username == user.username %}
-                                    <a class="btn btn-primary" href="#"><i class="fa fa-lg fa-edit"></i></a>
-                                    <a class="btn btn-primary" href="#" id="delPost"><i class="fa fa-lg fa-trash"></i></a>
+                                <a class="btn btn-primary" href="/post/publicacion/edit/{{ p._id.toString() }}"><i
+                                        class="fa fa-lg fa-edit"></i></a>
+                                <button class="btn btn-primary delPost" href="/post/list" id="{{ p._id.toString() }}"><i
+                                        class="fa fa-lg fa-trash"></i></button>
                                 {% endif %}
                             </div>
                             <h4>{{ p.titulo }}</h4>
@@ -111,7 +117,7 @@
                                     class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
                                     <span>Te gusta este post</span></li>
                              -->
-                            <li class="shares"><a href="#"><i
+                            <li class="shares"><a href="/post/publicacion/{{ p._id.toString() }}"><i
                                     class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
                             </li>
                             <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>2</span>
@@ -166,8 +172,6 @@
 </main>
 
 
-
-
 {% endblock %}
 
 {% block scripts %}
@@ -182,7 +186,8 @@
 <script src="/js/plugins/sweetalert.min.js"></script>
 
 <script>
-    $('#delPost').click(function(){
+    $('.delPost').click(function () {
+        var bt = $((this)).attr('id');
         swal({
             title: "¿Estás seguro de borrar el post?",
             text: "Eliminar una publicación es una acción irreversible.",
@@ -192,10 +197,10 @@
             cancelButtonText: "No, cancela el borrado",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm) {
+        }, function (isConfirm) {
             if (isConfirm) {
                 swal("Borrado", "La publicación ha sido eliminada", "success");
-                window.location.href = "/panel";
+                window.location.replace("/post/publicacion/del/" + bt);
             } else {
                 swal("Cancelado", "Se ha cancelado la operación", "error");
             }
@@ -211,15 +216,15 @@
                 title: "",
                 message: mensaje,
                 icon: 'fa fa-check'
-            },{
+            }, {
                 type: "info"
             });
-        }else if(tipoMensaje == "error"){
+        } else if (tipoMensaje == "error") {
             $.notify({
                 title: "Error: ",
                 message: mensaje,
                 icon: 'fa fa-error'
-            },{
+            }, {
                 type: "danger"
             });
         }
