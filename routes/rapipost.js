@@ -56,7 +56,7 @@ module.exports = function (app, gestorDB, fs) {
             fecha: new Date(),
             autor: req.body.autor,
             tiene_foto: req.body.tiene_foto,
-            comentarios: {}
+            comentarios: []
         };
         gestorDB.addPost(post, function (id) {
             if (id == null) {
@@ -105,4 +105,29 @@ module.exports = function (app, gestorDB, fs) {
         });
     });
 
+    //==========Comentarios=========
+
+
+    /**
+     * POST -> add comentario to post
+     */
+    app.post("/api/post/comentario/:id", function (req, res) {
+
+        var comentario = {
+            titulo: req.body.titulo,
+            contenido: req.body.contenido,
+            fecha: new Date(),
+            autor: req.body.autor
+        };
+        var criterio = {"_id": gestorDB.mongo.ObjectID(req.params.id)};
+        gestorDB.addComentario(criterio,comentario, function (id) {
+            if (id == null) {
+                res.status(500);
+                res.json({error: "Se ha producido un error"});
+            } else {
+                res.status(201);
+                res.json({mensaje: "Comentario insertado", _id: id});
+            }
+        });
+    });
 };
