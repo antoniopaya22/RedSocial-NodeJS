@@ -56,4 +56,13 @@ module.exports = function (app, swig, gestorDB) {
 
         });
     });
+
+    //==========CHAT=============
+    app.get('/chat', function (req, res) {
+        var respuesta = swig.renderFile('views/chat/bchat.html', {
+            usuario : req.session.usuario
+        });
+        res.send(respuesta);
+    });
+
 };
