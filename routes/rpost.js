@@ -211,5 +211,35 @@ module.exports = function (app, swig, gestorDB, fs) {
             }
         });
     });
+
+    /**
+     * ADD Comentario
+     */
+    app.post("/post/comentario/:idPost", function (req, res) {
+        var configuracion = {
+            url: "http://localhost:8081/api/post/comentario/"+req.params.idPost,
+            method: "post",
+            json: true,
+            body: {
+                titulo : req.body.titulo,
+                autor: req.session.usuario.username,
+                contenido : req.body.contenido
+            }
+        };
+
+        var rest = app.get("rest");
+        rest(configuracion,function (error,response,body) {
+            if(error != null){
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al añadir el comentario"
+                });
+                res.send(respuesta);
+            }else{
+                res.redirect("/post/publicacion/"+req.params.idPost+"?mensaje=Comentario creado correctamente");
+            }
+        });
+
+    });
     
 };

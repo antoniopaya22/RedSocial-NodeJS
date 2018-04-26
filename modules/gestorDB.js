@@ -160,7 +160,24 @@
              }
          });
      },
-     addPeticionAmistad : function(peticion, funcionCallback) {
+     addComentario : function (criterio,comentario,funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('publicaciones');
+                 collection.update(criterio, { $push: {comentarios: comentario } }, function(err, result) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(criterio._id);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+   addPeticionAmistad : function(peticion, funcionCallback) {
          this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
              if (err) {
                  funcionCallback(null);
@@ -264,5 +281,5 @@
                  });
              }
          });
-     }
+}
 };
