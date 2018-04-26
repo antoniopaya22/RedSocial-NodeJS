@@ -183,11 +183,11 @@
                  funcionCallback(null);
              } else {
                  var collection = db.collection('peticiones_amistad');
-                 collection.remove(criterio, function(err, result) {
+                 collection.remove(criterio, function(err, obj) {
                      if (err) {
                          funcionCallback(null);
                      } else {
-                         funcionCallback(result);
+                         funcionCallback(obj.result.n);
                      }
                      db.close();
                  });
@@ -242,6 +242,23 @@
                          funcionCallback(null);
                      } else {
                          funcionCallback(usuarios[0].amigos);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     getListaAmigos : function(criterio, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('usuarios');
+                 collection.find( criterio ).toArray(function(err, usuarios) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(usuarios);
                      }
                      db.close();
                  });

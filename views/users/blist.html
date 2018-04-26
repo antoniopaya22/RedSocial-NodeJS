@@ -54,12 +54,12 @@
                     <div class="row">
                         <div class="col-md-4">
                             <h5>
-                                {% if usuario.nombre != "" %}
-                                    <a href="/users/perfil/?username={{ user.username }}">{{ user.nombre }}
-                                        {{ usuario.apellidos }}</a>
-                                {% else %}
-                                    <a href="/users/perfil/?username={{ user.username }}">{{ user.username }}</a>
-                                {% endif %}
+                            {% if usuario.nombre != "" %}
+                                <a href="/users/perfil/?username={{ user.username }}">{{ user.nombre }}
+                                    {{ usuario.apellidos }}</a>
+                            {% else %}
+                                <a href="/users/perfil/?username={{ user.username }}">{{ user.username }}</a>
+                            {% endif %}
                             </h5>
                             {% if usuario.foto_perfil != "" %}
                                 <a href="#"><img

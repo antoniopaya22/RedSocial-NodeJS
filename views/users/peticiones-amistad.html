@@ -11,45 +11,21 @@
 		<div>
 			<h1>
 				<i class="fa fa-users"></i>
-				<span>Lista de amigos</span>
+				<span>Peticiones de amistad</span>
 			</h1>
-			
+			<p>Aquí podrás aceptar y rechazar peticiones de amistad</p>
 		</div>
 		<ul class="app-breadcrumb breadcrumb">
 			<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
-			<li class="breadcrumb-item"><a href="#">Lista de amigos</a></li>
+			<li class="breadcrumb-item"><a href="#">Peticiones de amistad</a></li>
 		</ul>
 	</div>
- 	
- 	<div class="row">
-		<div class="col-md-4">
-			<h2>Buscar amigos</h2>
-		</div>
-		<div class="col-md-8">
-				<form class="navbar-form" action="/users/lista-amigos">
-					<div class="sender row">
-						<div class="col-md-6">
-							<input id="buscar" name="busqueda" type="text" class="form-control" size="80"
-								placeholder="Buscar usuarios amigos">
-						</div>
-                		<div class="col-md-6">
-                			<button class="btn btn-primary" type="submit">
-                			<i class="fa fa-lg fa-fw fa fa-search"></i> <span>Buscar</span></button>
-                			<button class="btn btn-secondary" href="#">Resetear</button>
-                		</div>
-              		</div>
-				</form>
-			</div>
-		</div>
-	</div>
- 	
- 	<br>
 
-	{% if usuarios.length == 0 %} <!-- Usuario sin amigos -->
- 	<div>
+	{% if usuarios.length == 0 %}
+	<div>
 		<div class="col-md-12">
 			<div class="alert alert-warning">
-				<strong>¡Vaya! No tienes amigos</strong>
+				<strong th:text="#{Usuarios.peticiones.sinPeticiones}">¡Vaya! No tienes ninguna petición de amistad pendiente.</strong>
 			</div>
 		</div>
 	</div>
@@ -79,8 +55,23 @@
 							{% endif %}
 						</div>
 						<div class="col-md-8">
-							<h5>Email</h5>
-							<p>{{ user.email }}</p>
+							<h5>Descripción</h5>
+							<p> <span>El usuario </span>
+								<a class="alert-link" href="/users/perfil/{{ user.username }}" text="{{ user.username }}">
+									Usuario </a> <span> quiere ser tu amig@</span>
+							</p>
+							<form action="/users/aceptarPeticion" method="post">
+								<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+								<button type="submit" class="btn btn-outline-primary">
+									<span>Aceptar petición</span>
+								</button>
+							</form>
+							<form action="/users/rechazarPeticion" method="post">
+								<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+								<button type="submit" class="btn btn-outline-primary">
+									<span>Rechazar petición</span>
+								</button>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -119,7 +110,7 @@
 			</li>
 		</ul>
 	</div>
-	
+
 </main>
 
 {% endblock %}

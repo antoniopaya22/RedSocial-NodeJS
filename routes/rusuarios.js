@@ -128,10 +128,11 @@ module.exports = function (app, swig, gestorDB) {
     //==========LISTAR USUARIOS=============
 
     /*
-        GET: Cerrar Sesion
+        GET: Listar usuarios
      */
     app.get("/users/lista-usuarios", function (req, res) {
         var criterio = {};
+
         if (req.query.busqueda != null) {
             criterio = {
                 $or: [
@@ -140,14 +141,15 @@ module.exports = function (app, swig, gestorDB) {
                 ]
             };
         }
+
         var pg = parseInt(req.query.pg);
         if (req.query.pg == null) {
             pg = 1;
         }
 
         gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
-            if (usuarios == null || usuarios.length == 0) {
-                res.redirect("/" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
+            if (usuarios == null) {
+                res.redirect("/users/lista-usuarios" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
                     "&tipoError=error");
             }else{
                 var pgUltima = total / 5;
@@ -196,6 +198,51 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
+    app.get("/users/lista-amigos", function(req, res){
+        var criterio = {};
+        var idUsuarioSesionToArray = [ req.session.usuario._id ];
+
+        if (req.query.busqueda != null) {
+            criterio = {
+                $or: [
+                    {username: {$regex: ".*" + req.query.busqueda + ".*"}},
+                    {email: {$regex: ".*" + req.query.busqueda + ".*"}}
+                ],
+                amigos : { $in : idUsuarioSesionToArray }
+            };
+        }
+        else{
+            criterio = {
+                amigos : { $in : idUsuarioSesionToArray }
+            };
+        }
+
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+
+        gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
+            if (usuarios == null) {
+                res.redirect("/users/lista-amigos" + "?mensaje=Problema al mostrar los usuarios amigos" + "&tipoMensaje=alert-danger "+
+                    "&tipoError=error");
+            }else{
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+
+                var respuesta = swig.renderFile('views/users/lista-amigos.html', {
+                    usuario: req.session.usuario,
+                    usuarios: usuarios,
+                    pgActual: pg,
+                    pgUltima: pgUltima
+                });
+                res.send(respuesta);
+            }
+        });
+    });
+
     /*
         GET: Perfil
      */
@@ -225,6 +272,44 @@ module.exports = function (app, swig, gestorDB) {
                 });
             }
         });
+    });
+
+    /*
+        POST: Aceptar petición
+     */
+    app.post("/users/aceptarPeticion", function(req, res){
+        var id_enviador = req.body.enviador.toString();
+        var id_recibidor = req.session._id.toString();
+
+        var criterio = {
+            $or: [
+                {"id_enviador" : id_enviador, "id_recibidor" : id_recibidor},
+                {"id_enviador" : id_recibidor, "id_recibidor" : id_enviador}
+            ]
+        };
+
+        gestorDB.deletePeticionAmistad( criterio, function (resultado){
+            if (resultado == 0)
+                res.redirect("/users/lista-peticiones" + "?mensaje=Error al aceptar petición");
+            else
+            {
+                var amigos = res.session.usuario.amigos;
+/*
+                if (amigos == null)
+                {
+
+                }
+*/            }
+
+        });
+
+        )
+    });
+
+    /*
+        POST: Aceptar petición
+     */
+    app.post("/users/rechazarPeticion", function(req, res){
 
     });
 };
