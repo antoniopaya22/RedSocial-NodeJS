@@ -102,7 +102,7 @@
                             {% elseif user.esAmigo == true %}
                             <!-- Cuando los dos usuarios ya son amigos -->
                             <div class="alert alert-dismissible alert-success">
-                                <strong>¡Qué bien!</strong> <a class="alert-link" href="/users/perfil/{{user.username}}">{{ user.username }}</a>
+                                <strong>¡Qué bien!</strong> <a class="alert-link" href="/users/perfil/?username={{user.username}}">{{ user.username }}</a>
                                 <span> y tú ya sois amigos.</span>
                             </div>
 

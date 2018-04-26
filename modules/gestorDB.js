@@ -36,6 +36,23 @@
             }
         });
     },
+    updateUsuarios : function(criterio, nuevoUsuario, funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collecion = db.collection('usuarios');
+                collecion.update(criterio, {$set : nuevoUsuario} , function (err, usuarios) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(usuarios);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
     getUsuarios: function (criterio, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
             if (err) {
@@ -265,21 +282,4 @@
              }
          });
      },
-     getListaAmigos : function(criterio, funcionCallback){
-         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-             if (err) {
-                 funcionCallback(null);
-             } else {
-                 var collection = db.collection('usuarios');
-                 collection.find( criterio ).toArray(function(err, usuarios) {
-                     if (err) {
-                         funcionCallback(null);
-                     } else {
-                         funcionCallback(usuarios);
-                     }
-                     db.close();
-                 });
-             }
-         });
-}
 };

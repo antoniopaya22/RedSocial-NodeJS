@@ -275,9 +275,108 @@ module.exports = function (app, swig, gestorDB) {
     });
 
     /*
+        GET: Listar peticiones de amistad
+     */
+    app.get("/users/lista-peticiones", function(req, res){
+        var criterio = { "id_recibidor" : req.session.usuario._id.toString() };
+
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+
+        gestorDB.getPeticionesAmistadPg(criterio, pg, function (usuarios, total) {
+            var criterio = [];
+
+            usuarios.forEach(function(usuario){
+               criterio.push( gestorDB.mongo.ObjectID(usuario.id_enviador) );
+            });
+
+            gestorDB.getUsuarios( { _id : {$in : criterio} } , function(usuarios){
+                if (usuarios == null) {
+                    res.redirect("/users/lista-peticiones" + "?mensaje=Error al listar peticiones" + "&tipoMensaje=alert-danger "+
+                        "&tipoError=error");
+                }
+                else
+                {
+                    var pgUltima = total / 5;
+                    if (total % 5 > 0) {
+                        pgUltima = pgUltima + 1;
+                    }
+
+                    var respuesta = swig.renderFile('views/users/lista-peticiones.html', {
+                        usuario: req.session.usuario,
+                        usuarios: usuarios,
+                        pgActual: pg,
+                        pgUltima: pgUltima
+                    });
+                    res.send(respuesta);
+                }
+            });
+        });
+    });
+
+    /*
         POST: Aceptar petición
      */
     app.post("/users/aceptarPeticion", function(req, res){
+        var id_enviador = req.body.enviador;
+        var id_recibidor = req.session.usuario._id.toString();
+
+        var criterio = {
+            $or: [
+                {"id_enviador" : id_enviador, "id_recibidor" : id_recibidor},
+                {"id_enviador" : id_recibidor, "id_recibidor" : id_enviador}
+            ]
+        };
+
+        gestorDB.deletePeticionAmistad( criterio, function (resultado){
+            if (resultado == 0)
+                res.redirect("/users/lista-peticiones?mensaje=Error al aceptar la petición de amistad" +
+                                                            "&tipoMensaje=alert-danger");
+            else
+            {
+                gestorDB.getUsuarios({ _id: gestorDB.mongo.ObjectID(id_enviador) }, function(usuarios){
+                    var usuario_enviador_peticion = usuarios[0];
+                    var amigos_usuario_enviador = usuario_enviador_peticion.amigos;
+
+                    // cogemos la lista de amigos del usuario en sesión, y del que le envió la petición
+                    var amigos_usuario_sesion = req.session.usuario.amigos;
+
+                    // Añadimos, al usuario en sesión, el nuevo amigo
+                    if (amigos_usuario_sesion == null)
+                        amigos_usuario_sesion = [ id_enviador ];
+                    else
+                        amigos_usuario_sesion.push( id_enviador );
+
+                    // Añadimos al usuario que envió la petición su nuevo amigo
+                    if (amigos_usuario_enviador == null)
+                        amigos_usuario_enviador = [ id_recibidor ];
+                    else
+                        amigos_usuario_enviador.push( id_recibidor );
+
+                    req.session.usuario.amigos = amigos_usuario_sesion;
+
+                    // actualizamos los dos usuarios en la bbdd
+                    gestorDB.updateUsuarios( { _id: gestorDB.mongo.ObjectID(id_enviador) }, { amigos: amigos_usuario_enviador }, function(res_env){
+                        gestorDB.updateUsuarios( { _id: gestorDB.mongo.ObjectID(id_recibidor) }, { amigos: amigos_usuario_sesion }, function(res_sesion){
+                            if (res_env == null || res_sesion == null)
+                                res.redirect("/users/lista-peticiones?mensaje=Error al aceptar la petición de amistad" +
+                                        "&tipoMensaje=alert-danger");
+                            else
+                                res.redirect("/users/lista-peticiones?mensaje=¡Petición aceptada con éxito!");
+                        });
+                    });
+                });
+            }
+
+        });
+    });
+
+    /*
+        POST: Rechazar petición
+     */
+    app.post("/users/rechazarPeticion", function(req, res){
         var id_enviador = req.body.enviador.toString();
         var id_recibidor = req.session._id.toString();
 
@@ -290,24 +389,12 @@ module.exports = function (app, swig, gestorDB) {
 
         gestorDB.deletePeticionAmistad( criterio, function (resultado){
             if (resultado == 0)
-                res.redirect("/users/lista-peticiones" + "?mensaje=Error al aceptar petición");
+                res.redirect("/users/lista-peticiones?mensaje=Error al rechazar la petición de amistad" +
+                                                                "&tipoMensaje=alert-danger");
             else
             {
-                var amigos = res.session.usuario.amigos;
-/*
-                if (amigos == null)
-                {
-
-                }
-*/            }
-
+                res.redirect("/users/lista-peticiones?mensaje=Petición de amistad rechazada satisfactoriamente");
+            }
         });
-    });
-
-    /*
-        POST: Aceptar petición
-     */
-    app.post("/users/rechazarPeticion", function(req, res){
-
     });
 };

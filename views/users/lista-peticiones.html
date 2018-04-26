@@ -25,7 +25,7 @@
 	<div>
 		<div class="col-md-12">
 			<div class="alert alert-warning">
-				<strong th:text="#{Usuarios.peticiones.sinPeticiones}">¡Vaya! No tienes ninguna petición de amistad pendiente.</strong>
+				<strong>¡Vaya! No tienes ninguna petición de amistad pendiente.</strong>
 			</div>
 		</div>
 	</div>
@@ -57,21 +57,25 @@
 						<div class="col-md-8">
 							<h5>Descripción</h5>
 							<p> <span>El usuario </span>
-								<a class="alert-link" href="/users/perfil/{{ user.username }}" text="{{ user.username }}">
-									Usuario </a> <span> quiere ser tu amig@</span>
+								<a class="alert-link" href="/users/perfil/?username={{ user.username }}">
+									<span>{{ user.username }} </span>
+								</a>
+								<span> quiere ser tu amig@</span>
 							</p>
-							<form action="/users/aceptarPeticion" method="post">
-								<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
-								<button type="submit" class="btn btn-outline-primary">
-									<span>Aceptar petición</span>
-								</button>
-							</form>
-							<form action="/users/rechazarPeticion" method="post">
-								<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
-								<button type="submit" class="btn btn-outline-primary">
-									<span>Rechazar petición</span>
-								</button>
-							</form>
+							<div class="row">
+								<form action="/users/aceptarPeticion" method="post">
+									<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+									<button type="submit" class="btn btn-success">
+										<span>Aceptar petición</span>
+									</button>
+								</form>
+								<form action="/users/rechazarPeticion" method="post">
+									<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+									<button type="submit" class="btn btn-danger">
+										<span>Rechazar petición</span>
+									</button>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -86,27 +90,27 @@
 		<ul class="pagination">
 			<!-- Primera -->
 			<li class="page-item">
-				<a class="page-link" href="/users/lista-amigos?pg=1">Primera</a>
+				<a class="page-link" href="/users/lista-peticiones?pg=1">Primera</a>
 			</li>
 			<!-- Anterior (si la hay ) -->
 			{% if pgActual-1 >= 1 %}
 			<li class="page-item">
-				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
 			</li>
 			{% endif %}
 			<!-- Actual -->
 			<li class="page-item active">
-				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual }}">{{ pgActual }}</a>
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual }}">{{ pgActual }}</a>
 			</li>
 			<!-- Siguiente (si la hay) -->
 			{% if pgActual+1 <= pgUltima %}
 			<li class="page-item">
-				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
 			</li>
 			{% endif %}
 			<!-- Última -->
 			<li class="page-item">
-				<a class="page-link" href="/users/lista-amigos?pg={{ pgUltima }}">Última</a>
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgUltima }}">Última</a>
 			</li>
 		</ul>
 	</div>
