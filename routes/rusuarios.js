@@ -24,6 +24,22 @@ module.exports = function (app, swig, gestorDB) {
         var respuesta = swig.renderFile('views/login.html', {});
         res.send(respuesta);
     });
+    /*
+        POST: Enviar petición
+    */
+    app.post("/users/enviarAmistad", function(req, res){
+        var peticion = {
+            "id_enviador" : req.session.usuario._id,
+            "id_recibidor" : req.body.peticion
+        };
+
+        gestorDB.addPeticionAmistad( peticion, function(id){
+            if (id == null)
+                res.redirect("/users/lista-usuarios?mensaje=Error al enviar la petición de amistad");
+            else
+                res.redirect("/users/lista-usuarios?mensaje=Petición de amistad enviada satisfactoriamente");
+        });
+    });
 
     /*
         POST: Login
@@ -112,10 +128,11 @@ module.exports = function (app, swig, gestorDB) {
     //==========LISTAR USUARIOS=============
 
     /*
-        GET: Cerrar Sesion
+        GET: Listar usuarios
      */
     app.get("/users/lista-usuarios", function (req, res) {
         var criterio = {};
+
         if (req.query.busqueda != null) {
             criterio = {
                 $or: [
@@ -124,22 +141,99 @@ module.exports = function (app, swig, gestorDB) {
                 ]
             };
         }
+
         var pg = parseInt(req.query.pg);
         if (req.query.pg == null) {
             pg = 1;
         }
 
         gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
-            if (usuarios == null || usuarios.length == 0) {
-                res.redirect("/" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
+            if (usuarios == null) {
+                res.redirect("/users/lista-usuarios" + "?mensaje=Problema al mostrar los usuarios" + "&tipoMensaje=alert-danger "+
                     "&tipoError=error");
             }else{
                 var pgUltima = total / 5;
                 if (total % 5 > 0) {
                     pgUltima = pgUltima + 1;
                 }
-                var respuesta = swig.renderFile('views/users/blist.html', {
-                    usuario : req.session.usuario,
+
+                gestorDB.getAmigosUsuario( { "_id": gestorDB.mongo.ObjectID(req.session.usuario._id) }, function(amigos){
+                    if (amigos == null)
+                        amigos = [];
+
+                    gestorDB.getPeticionesAmistad({ "id_enviador" : req.session.usuario._id }, function(peticiones){
+                        if (peticiones == null)
+                            res.redirect("/" + "?mensaje=Error al listar usuarios (que hayan recibido peticion)" +
+                                "&tipoMensaje=alert-danger "+ "&tipoError=error");
+                        else
+                        {
+                            // Vamos a marcar quienes son amigos del usuario en sesión
+                            usuarios.forEach(function (usuario) {
+                                usuario["esAmigo"] = false;
+                                usuario["seHaEnviadoPeticion"] = false;
+                                amigos.forEach(function (usuario_amigo) {
+                                    if ( (usuario._id.toString() === usuario_amigo.toString()) ) {
+                                        usuario["esAmigo"] = true;
+                                    }
+                                });
+
+                                peticiones.forEach(function(peticion){
+                                    if ( (usuario._id.toString() === peticion.id_recibidor.toString()) ) {
+                                        usuario["seHaEnviadoPeticion"] = true;
+                                    }
+                                });
+                            });
+
+                            var respuesta = swig.renderFile('views/users/blist.html', {
+                                usuario: req.session.usuario,
+                                usuarios: usuarios,
+                                pgActual: pg,
+                                pgUltima: pgUltima
+                            });
+                            res.send(respuesta);
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+    app.get("/users/lista-amigos", function(req, res){
+        var criterio = {};
+        var idUsuarioSesionToArray = [ req.session.usuario._id ];
+
+        if (req.query.busqueda != null) {
+            criterio = {
+                $or: [
+                    {username: {$regex: ".*" + req.query.busqueda + ".*"}},
+                    {email: {$regex: ".*" + req.query.busqueda + ".*"}}
+                ],
+                amigos : { $in : idUsuarioSesionToArray }
+            };
+        }
+        else{
+            criterio = {
+                amigos : { $in : idUsuarioSesionToArray }
+            };
+        }
+
+        var pg = parseInt(req.query.pg);
+        if (req.query.pg == null) {
+            pg = 1;
+        }
+
+        gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
+            if (usuarios == null) {
+                res.redirect("/users/lista-amigos" + "?mensaje=Problema al mostrar los usuarios amigos" + "&tipoMensaje=alert-danger "+
+                    "&tipoError=error");
+            }else{
+                var pgUltima = total / 5;
+                if (total % 5 > 0) {
+                    pgUltima = pgUltima + 1;
+                }
+
+                var respuesta = swig.renderFile('views/users/lista-amigos.html', {
+                    usuario: req.session.usuario,
                     usuarios: usuarios,
                     pgActual: pg,
                     pgUltima: pgUltima
@@ -178,6 +272,44 @@ module.exports = function (app, swig, gestorDB) {
                 });
             }
         });
+    });
+
+    /*
+        POST: Aceptar petición
+     */
+    app.post("/users/aceptarPeticion", function(req, res){
+        var id_enviador = req.body.enviador.toString();
+        var id_recibidor = req.session._id.toString();
+
+        var criterio = {
+            $or: [
+                {"id_enviador" : id_enviador, "id_recibidor" : id_recibidor},
+                {"id_enviador" : id_recibidor, "id_recibidor" : id_enviador}
+            ]
+        };
+
+        gestorDB.deletePeticionAmistad( criterio, function (resultado){
+            if (resultado == 0)
+                res.redirect("/users/lista-peticiones" + "?mensaje=Error al aceptar petición");
+            else
+            {
+                var amigos = res.session.usuario.amigos;
+/*
+                if (amigos == null)
+                {
+
+                }
+*/            }
+
+        });
+
+        )
+    });
+
+    /*
+        POST: Aceptar petición
+     */
+    app.post("/users/rechazarPeticion", function(req, res){
 
     });
 };

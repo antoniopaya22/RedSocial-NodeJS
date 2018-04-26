@@ -1,0 +1,125 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Lista de amigos - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+<!-- Contenido -->
+<main class="app-content">
+
+	<div class="app-title">
+		<div>
+			<h1>
+				<i class="fa fa-users"></i>
+				<span>Lista de amigos</span>
+			</h1>
+			
+		</div>
+		<ul class="app-breadcrumb breadcrumb">
+			<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+			<li class="breadcrumb-item"><a href="#">Lista de amigos</a></li>
+		</ul>
+	</div>
+ 	
+ 	<div class="row">
+		<div class="col-md-4">
+			<h2>Buscar amigos</h2>
+		</div>
+		<div class="col-md-8">
+				<form class="navbar-form" action="/users/lista-amigos">
+					<div class="sender row">
+						<div class="col-md-6">
+							<input id="buscar" name="busqueda" type="text" class="form-control" size="80"
+								placeholder="Buscar usuarios amigos">
+						</div>
+                		<div class="col-md-6">
+                			<button class="btn btn-primary" type="submit">
+                			<i class="fa fa-lg fa-fw fa fa-search"></i> <span>Buscar</span></button>
+                			<button class="btn btn-secondary" href="#">Resetear</button>
+                		</div>
+              		</div>
+				</form>
+			</div>
+		</div>
+	</div>
+ 	
+ 	<br>
+
+	{% if usuarios.length == 0 %} <!-- Usuario sin amigos -->
+ 	<div>
+		<div class="col-md-12">
+			<div class="alert alert-warning">
+				<strong>¡Vaya! No tienes amigos</strong>
+			</div>
+		</div>
+	</div>
+
+	{% else %}
+	<div class="row">
+		{% for user in usuarios %}
+		<div class="col-md-12">
+			<div class="card mb-3 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-4">
+							<h5>
+							{% if usuario.nombre != "" %}
+							<a href="/users/perfil/?username={{ user.username }}">{{ user.nombre }}
+								{{ usuario.apellidos }}</a>
+							{% else %}
+							<a href="/users/perfil/?username={{ user.username }}">{{ user.username }}</a>
+							{% endif %}
+							</h5>
+							{% if usuario.foto_perfil != "" %}
+							<a href="#"><img
+									src="{{ user.foto_perfil }}" width="48" height="48"></a>
+							{% else %}
+							<a href="#"><img
+									src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" width="48" height="48"></a>
+							{% endif %}
+						</div>
+						<div class="col-md-8">
+							<h5>Email</h5>
+							<p>{{ user.email }}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+	<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+	<div class="row text-center">
+		<ul class="pagination">
+			<!-- Primera -->
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-amigos?pg=1">Primera</a>
+			</li>
+			<!-- Anterior (si la hay ) -->
+			{% if pgActual-1 >= 1 %}
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+			</li>
+			{% endif %}
+			<!-- Actual -->
+			<li class="page-item active">
+				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual }}">{{ pgActual }}</a>
+			</li>
+			<!-- Siguiente (si la hay) -->
+			{% if pgActual+1 <= pgUltima %}
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-amigos?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+			</li>
+			{% endif %}
+			<!-- Última -->
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-amigos?pg={{ pgUltima }}">Última</a>
+			</li>
+		</ul>
+	</div>
+	
+</main>
+
+{% endblock %}
