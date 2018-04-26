@@ -1,0 +1,110 @@
+<!-- Container -->
+<div id="contenedor-principal" class="container clearfix">
+<div class="people-list" id="people-list">
+    <div class="search">
+        <input type="text" placeholder="Buscar usuario"/>
+        <i class="fa fa-search"></i>
+    </div>
+    <ul class="list">
+        <li class="clearfix">
+            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                 width="48" height="48"/>
+            <div class="about">
+                <div class="name">Usuario 1</div>
+                <div class="status">
+                    <i class="fa fa-circle online"></i> online
+                </div>
+            </div>
+        </li>
+
+        <li class="clearfix">
+            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                 width="48" height="48"/>
+            <div class="about">
+                <div class="name">Usuario 2</div>
+                <div class="status">
+                    <i class="fa fa-circle offline"></i> hace 5 minutos
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="chat">
+    <!-- Chat header -->
+    <div class="chat-header clearfix">
+        <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+             width="48" height="48"/>
+
+        <div class="chat-about">
+            <div class="chat-with">Usuario 1</div>
+            <div class="chat-num-messages">hay 190 mensajes en la conversación</div>
+        </div>
+        <i class="fa fa-star"></i>
+    </div>
+    <!-- end chat-header -->
+
+    <!-- Mensajes del chat -->
+    <div class="chat-history">
+        <ul>
+
+            <!-- Mensaje 1 -->
+            <li class="clearfix">
+                <div class="message-data align-right">
+                    <span class="message-data-time">26/04/2018</span> &nbsp; &nbsp;
+                    <span class="message-data-name">Yo</span> <i class="fa fa-circle me"></i>
+
+                </div>
+                <div class="message other-message float-right">
+                    Hola, que tal todo?
+                </div>
+            </li>
+
+            <!-- Mensaje 2 -->
+            <li>
+                <div class="message-data">
+                    <span class="message-data-name"><i class="fa fa-circle online"></i> Usuario1</span>
+                    <span class="message-data-time">26/04/2018</span>
+                </div>
+                <div class="message my-message">
+                    Bien o, usted?
+                </div>
+            </li>
+
+            <!-- Mensaje 3 -->
+            <li class="clearfix">
+                <div class="message-data align-right">
+                    <span class="message-data-time">26/04/2018</span> &nbsp; &nbsp;
+                    <span class="message-data-name">Yo</span> <i class="fa fa-circle me"></i>
+
+                </div>
+                <div class="message other-message float-right">
+                    Aqui andamios.
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+    <!-- end chat-mensajes -->
+
+    <!-- Enviar mensaje -->
+    <div class="chat-message clearfix">
+        <textarea name="message-to-send" id="message-to-send" placeholder="Escribe tu mensaje" rows="3"></textarea>
+        <button>Enviar</button>
+
+    </div>
+
+</div>
+<!-- end chat -->
+</div>
+<script>
+    $.notify({
+        title: "Perfecto: ",
+        message: "Te has logueado correctamente",
+        icon: 'fa fa-check'
+    },{
+        type: "success",
+        delay: 4000
+    });
+</script>

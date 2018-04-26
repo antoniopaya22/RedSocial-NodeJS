@@ -27,6 +27,7 @@ var fs = require('fs');
 var crypto = require('crypto');
 var rest = require('request');
 var execSync = require('child_process').execSync;
+var jwt = require('jsonwebtoken');
 
 //==========VARIABLES===============
 app.set('port', 8081);
@@ -34,8 +35,17 @@ app.set('db', 'mongodb://sdi:EIISDI2018$@ds245478.mlab.com:45478/redsocial');
 app.set('clave', 'abcdefg');
 app.set('crypto', crypto);
 app.set('rest',rest);
+app.set('jwt', jwt);
 
 //==========INICIACION=============
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, UPDATE, PUT");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, token");
+    next();
+});
+
 gestorDB.init(app,mongo,gestorDB);
 
 app.use(bodyParser.json());
@@ -72,6 +82,7 @@ app.use("/chat", routerUsuarioSession);
 
 //==========RUTAS================
 require("./routes/rapipost.js")(app,gestorDB, fs);
+require("./routes/rapimensajes.js")(app, gestorDB);
 require("./routes/rusuarios.js")(app, swig, gestorDB);
 require("./routes/rpanel.js")(app, swig, gestorDB);
 require("./routes/rpost.js")(app, swig, gestorDB, fs);
@@ -80,7 +91,6 @@ require("./routes/rpost.js")(app, swig, gestorDB, fs);
 app.get('/', function (req, res) {
     res.redirect("/panel");
 });
-
 
 
 //=========ERRORES==============

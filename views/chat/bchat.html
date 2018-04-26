@@ -27,16 +27,15 @@
             <hr/>
             <form class="navbar-form" method="get" action="#">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <input name="busqueda" type="text" class="form-control" size="80"
                                placeholder="Buscar chat">
                     </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary btn-sm" type="submit"><i
+                    <div class="col-md-6">
+                        <button class="btn btn-primary btn-md" type="submit"><i
                                 class="fa fa-lg fa-fw fa fa-search"></i> Buscar
                         </button>
                     </div>
-
                 </div>
             </form>
             <hr/>
@@ -57,19 +56,65 @@
                 <h3 class="tile-title">Chat</h3>
                 <div class="messanger">
                     <div class="messages">
-                        <div class="message"><img
-                                src="https://s3.amazonaws.com/uifaces/faces/twitter/tonypeterson/48.jpg">
-                            <p class="info">Hello there!<br>Good Morning</p>
+                        <div class="message">
+                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                 width="48" height="48">
+                            <p class="info">Hola, <br>Que tal</p>
                         </div>
-                        <div class="message me"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg">
-                            <p class="info">Hi<br>Good Morning</p>
+                        <div class="message me">
+                            <!-- Editar mensaje -->
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-info-circle"></i>Información del mensaje</a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-edit"></i>Editar mensaje</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-trash"></i>Eliminar mensaje</a>
+                                </div>
+                            </div>
+                            <!-- Mensaje -->
+                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                 width="48" height="48">
+                            <p class="info">Bien tu?</p>
+                            <i class="fa fa-sg fa-fw fa-check" style="color:dodgerblue"
+                               data-toggle="tooltip" data-placement="left" title=""
+                               data-original-title="Leido a las 20:00"></i>
                         </div>
-                        <div class="message"><img
-                                src="https://s3.amazonaws.com/uifaces/faces/twitter/tonypeterson/48.jpg">
-                            <p class="info">How are you?</p>
+                        <div class="message">
+                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                 width="48" height="48">
+                            <p class="info">Correctamente</p>
                         </div>
-                        <div class="message me"><img src="https://s3.amazonaws.com/uifaces/faces/twitter/jsa/48.jpg">
-                            <p class="info">I'm Fine.</p>
+                        <div class="message me">
+                            <!-- Editar mensaje -->
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="true" aria-expanded="false">
+
+                                </a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-info-circle"></i>Información del mensaje</a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-edit"></i>Editar mensaje</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-sg fa-fw fa-trash"></i>Eliminar mensaje</a>
+                                </div>
+                            </div>
+                            <!-- Mensaje -->
+                            <img src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png"
+                                 width="48" height="48">
+                            <p class="info">Me parece correcto</p>
+                            <i class="fa fa-sg fa-fw fa-check" style="color:grey"
+                               data-toggle="tooltip" data-placement="left" title=""
+                               data-original-title="Leido a las 20:00"></i>
                         </div>
                     </div>
                     <div class="sender">

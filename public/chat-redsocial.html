@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat - Red Social</title>
+    <!-- Font-awesome-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- CSS-->
+    <link rel="stylesheet" type="text/css" href="/css/chatCompleto.css">
+    <!-- JS -->
+    <script src="/js/jquery-3.2.1.min.js"></script>
+</head>
+<body id="body">
+
+<!-- Container -->
+<div id="contenedor-principal" class="container clearfix">
+
+</div>
+<script>
+
+    var token;
+    var URLbase = "http://localhost:8081/api";
+
+    $("#body").load("widget-login.html");
+
+    function widgetChat() {
+        $("#body").load("widget-chat.html");
+    }
+
+</script>
+
+</body>
+</html>

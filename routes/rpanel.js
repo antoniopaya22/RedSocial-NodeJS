@@ -64,4 +64,5 @@ module.exports = function (app, swig, gestorDB) {
         });
         res.send(respuesta);
     });
+
 };

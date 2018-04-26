@@ -1,0 +1,75 @@
+<!-- CSS-->
+<link rel="stylesheet" type="text/css" href="/css/loginChat.css">
+
+
+<!-- Login Form-->
+<div class="form">
+    <div class="form-toggle"></div>
+    <div class="form-panel one">
+        <div class="form-header">
+            <h1>Iniciar sesión</h1>
+        </div>
+        <div class="form-content">
+            <div>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username" required="required" placeholder="Usuario o email"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required="required" placeholder="Contraseña"/>
+                </div>
+                <div class="form-group">
+                    <label class="form-remember">
+
+                    </label>
+                    <a class="form-recovery" href="/registro">¿No tienes cuenta? Regístrate aquí</a>
+                </div>
+                <div class="form-group">
+                    <button id="boton-login">Iniciar sesión</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-panel two">
+        <div class="form-header">
+            <h1>Sobre el chat</h1>
+        </div>
+        <div class="form-content">
+            <p class="parrafo"> Este chat es un cliente para la api
+                de mensajería de la Red Social</p>
+            <p class="parrafo">Autores: Antonio Payá González y Pablo Díaz Rancaño</p>
+        </div>
+    </div>
+</div>
+
+<script src="/js/loginChat.js"></script>
+<script src="/js/plugins/bootstrap-notify.min.js"></script>
+<script>
+    $("#boton-login").click(function () {
+        $.ajax({
+            url: URLbase + "/autenticar",
+            type: "POST",
+            data: {
+                username: $("#username").val(),
+                password: $("#password").val()
+            },
+            dataType: 'json',
+            success: function (respuesta) {
+                console.log(respuesta.token); // <- Probamos que muestra el token
+                token = respuesta.token;
+                $("#body").load("widget-chat.html");
+            },
+            error: function (error) {
+                $.notify({
+                    title: "Error: ",
+                    message: "Usuario o contraseña incorrectos",
+                    icon: 'fa fa-error'
+                },{
+                    type: "danger",
+                    delay: 4000
+                });
+            }
+        });
+    });
+</script>
