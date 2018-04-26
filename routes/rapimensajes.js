@@ -1,6 +1,33 @@
 module.exports = function (app, gestorDB) {
 
 
+    app.get("/api/usuarios/amigos", function (req,res) {
+        var token = req.body.token || req.query.token || req.headers['token'];
+        var id;
+        app.get('jwt').verify(token, 'secreto', function (err, infoToken) {
+            if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
+                res.status(403);// Forbidden
+                res.json({acceso: false, error: 'Token invalido o caducado'});
+                // También podríamos comprobar que intoToken.usuario existe
+                return;
+            } else {
+                id = infoToken.usuario._id;
+            }
+        });
+        var criterio = {
+            amigos : { $in : [id] }
+        };
+
+        gestorDB.getUsuarios(criterio, function (usuarios) {
+            if (usuarios == null) {
+                res.status(500);
+                res.json({error: "se ha producido un error"});
+            }else{
+                res.status(200);
+                res.send(JSON.stringify(usuarios));
+            }
+        });
+    });
 
     /**
      * Autenticacion por token
@@ -18,9 +45,9 @@ module.exports = function (app, gestorDB) {
                 res.status(401);
                 res.json({autenticado: false, mensaje: "Error, usuario o contraseña incorrectos"});
             } else {
-                var token = app.get('jwt').sign({usuario: usuarios[0].username, tiempo: Date.now() / 1000}, "secreto");
+                var token = app.get('jwt').sign({usuario: usuarios[0], tiempo: Date.now() / 1000}, "secreto");
                 res.status(200);
-                res.json({autenticado: true, token: token});
+                res.json({autenticado: true, token: token, usuario: usuarios[0]});
             }
         });
     });
