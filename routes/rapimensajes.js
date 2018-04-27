@@ -62,12 +62,49 @@ module.exports = function (app, gestorDB) {
     app.get("/api/mensajes/:id", function (req, res) {
         var criterio = {"_id": gestorDB.mongo.ObjectId(req.params.id)}
         gestorDB.getMensajes(criterio, function (mensajes) {
-            if (post == null) {
+            if (mensajes == null) {
                 res.status(500);
                 res.json({error: "Se ha producido un error"});
             } else {
                 res.status(200);
                 res.json(JSON.stringify(mensajes[0]));
+            }
+        });
+    });
+
+    /**
+     * GET all mensajes from conversation
+     * Param: id destino
+     */
+    app.get("/api/mensajes/all/:id", function (req, res) {
+        var usuario;
+        var token = req.body.token || req.query.token || req.headers['token'];
+        app.get('jwt').verify(token, 'secreto', function (err, infoToken) {
+            if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
+                res.status(403);// Forbidden
+                res.json({acceso: false, error: 'Token invalido o caducado'});
+                return;
+            } else {
+                usuario = infoToken.usuario;
+            }
+        });
+        gestorDB.getMensajes({}, function (mensajes) {
+            if (mensajes == null) {
+                res.status(500);
+                res.json({error: "Se ha producido un error"});
+            } else {
+                var mensajesFiltrados = mensajes.filter(function (x) {
+                    if(x.emisor._id == usuario._id.toString() && x.destino._id == req.params.id){
+                        return true;
+                    }
+                    else if(x.destino._id == usuario._id.toString() && x.emisor._id == req.params.id){
+                        return true;
+                    }
+                    else
+                        return false;
+                });
+                res.status(200);
+                res.json(JSON.stringify(mensajesFiltrados));
             }
         });
     });

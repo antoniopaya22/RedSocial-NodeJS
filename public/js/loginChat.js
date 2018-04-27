@@ -33,7 +33,6 @@ $(document).ready(function() {
             },
             dataType: 'json',
             success: function (respuesta) {
-                console.log(respuesta.token); // <- Probamos que muestra el token
                 token = respuesta.token;
                 usuario = respuesta.usuario;
                 Cookies.set('token',respuesta.token);
