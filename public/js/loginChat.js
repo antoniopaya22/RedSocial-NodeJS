@@ -22,4 +22,34 @@ $(document).ready(function() {
             'height': panelOne
         }, 200);
     });
+
+    $("#boton-login").click(function () {
+        $.ajax({
+            url: URLbase + "/autenticar",
+            type: "POST",
+            data: {
+                username: $("#username").val(),
+                password: $("#password").val()
+            },
+            dataType: 'json',
+            success: function (respuesta) {
+                console.log(respuesta.token); // <- Probamos que muestra el token
+                token = respuesta.token;
+                usuario = respuesta.usuario;
+                Cookies.set('token',respuesta.token);
+                $("#body").load("widget-chat.html");
+            },
+            error: function (error) {
+                Cookies.remove('token');
+                $.notify({
+                    title: "Error: ",
+                    message: "Usuario o contraseña incorrectos",
+                    icon: 'fa fa-error'
+                },{
+                    type: "danger",
+                    delay: 4000
+                });
+            }
+        });
+    });
 });

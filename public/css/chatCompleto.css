@@ -164,6 +164,7 @@ body {
 
 .chat .chat-message {
     padding: 30px;
+    background: #3892bd;
 }
 
 .chat .chat-message textarea {
@@ -187,10 +188,45 @@ body {
     color: #94C2ED;
     font-size: 16px;
     text-transform: uppercase;
-    border: none;
     cursor: pointer;
     font-weight: bold;
     background: #F2F5F8;
+}
+
+.botonEnviar {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    cursor: pointer;
+    margin: 0 auto;
+    border: 2px solid rgb(30,205,151);
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    font: normal 37px/70px "Advent Pro", Helvetica, sans-serif;
+    color: rgb(30, 205, 151);
+    text-align: center;
+    -o-text-overflow: clip;
+    text-overflow: clip;
+    letter-spacing: 1px;
+    background: rgba(0,0,0,0);
+    -webkit-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+    -moz-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+    -o-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+    transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
+}
+
+.botonEnviar:hover {
+    color: rgba(255,255,255,1);
+    background: rgb(30, 205, 151);
+}
+
+.botonEnviar:active {
+    border: 2px solid rgba(33,224,163,1);
+    background: rgba(33,224,163,1);
+    -webkit-transition: none;
+    -moz-transition: none;
+    -o-transition: none;
+    transition: none;
 }
 
 .chat .chat-message button:hover {

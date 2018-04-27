@@ -36,6 +36,23 @@
             }
         });
     },
+    updateUsuarios : function(criterio, nuevoUsuario, funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collecion = db.collection('usuarios');
+                collecion.update(criterio, {$set : nuevoUsuario} , function (err, usuarios) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(usuarios);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
     getUsuarios: function (criterio, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
             if (err) {
@@ -171,6 +188,111 @@
                          funcionCallback(null);
                      } else {
                          funcionCallback(criterio._id);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+   addPeticionAmistad : function(peticion, funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('peticiones_amistad');
+                 collection.insert(peticion, function (err, result) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(result.ops[0]._id);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     deletePeticionAmistad : function(criterio, funcionCallback){  // rechazar petición de amistad
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('peticiones_amistad');
+                 collection.remove(criterio, function(err, obj) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(obj.result.n);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     getPeticionesAmistad : function(criterio, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('peticiones_amistad');
+                 collection.find( criterio ).toArray(function(err, peticiones) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(peticiones);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     getPeticionesAmistadPg : function(criterio, pg, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('peticiones_amistad');
+                 collection.count(function(err, count){
+                     collection.find(criterio).skip( (pg-1)*4 ).limit( 4 )
+                         .toArray(function(err, peticiones) {
+                             if (err) {
+                                 funcionCallback(null);
+                             } else {
+                                 funcionCallback(peticiones, count);
+                             }
+                             db.close();
+                         });
+                 });
+             }
+         });
+     },
+     getAmigosUsuario : function(criterio, funcionCallback){
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('usuarios');
+                 collection.find( criterio ).toArray(function(err, usuarios) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(usuarios[0].amigos);
+                     }
+                     db.close();
+                 });
+             }
+         });
+     },
+     addMensaje : function(mensaje, funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('mensajes');
+                 collection.insert(mensaje, function(err, result) {
+                     if (err) {
+                         funcionCallback(null);
+                     } else {
+                         funcionCallback(result.ops[0]._id);
                      }
                      db.close();
                  });

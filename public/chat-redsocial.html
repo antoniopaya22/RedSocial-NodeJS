@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/css/chatCompleto.css">
     <!-- JS -->
     <script src="/js/jquery-3.2.1.min.js"></script>
+    <script src="/js/cookie.js"></script>
 </head>
 <body id="body">
 
@@ -17,18 +18,7 @@
 <div id="contenedor-principal" class="container clearfix">
 
 </div>
-<script>
-
-    var token;
-    var URLbase = "http://localhost:8081/api";
-
-    $("#body").load("widget-login.html");
-
-    function widgetChat() {
-        $("#body").load("widget-chat.html");
-    }
-
-</script>
+<script src="/js/chat.js"> </script>
 
 </body>
 </html>

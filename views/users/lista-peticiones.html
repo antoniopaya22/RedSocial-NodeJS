@@ -1,0 +1,120 @@
+{% extends "../base.html" %}
+
+{% block titulo %} Lista de amigos - RedSocial {% endblock %}
+
+{% block contenido_principal %}
+
+<!-- Contenido -->
+<main class="app-content">
+
+	<div class="app-title">
+		<div>
+			<h1>
+				<i class="fa fa-users"></i>
+				<span>Peticiones de amistad</span>
+			</h1>
+			<p>Aquí podrás aceptar y rechazar peticiones de amistad</p>
+		</div>
+		<ul class="app-breadcrumb breadcrumb">
+			<li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+			<li class="breadcrumb-item"><a href="#">Peticiones de amistad</a></li>
+		</ul>
+	</div>
+
+	{% if usuarios.length == 0 %}
+	<div>
+		<div class="col-md-12">
+			<div class="alert alert-warning">
+				<strong>¡Vaya! No tienes ninguna petición de amistad pendiente.</strong>
+			</div>
+		</div>
+	</div>
+
+	{% else %}
+	<div class="row">
+		{% for user in usuarios %}
+		<div class="col-md-12">
+			<div class="card mb-3 border-primary">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-4">
+							<h5>
+							{% if usuario.nombre != "" %}
+							<a href="/users/perfil/?username={{ user.username }}">{{ user.nombre }}
+								{{ usuario.apellidos }}</a>
+							{% else %}
+							<a href="/users/perfil/?username={{ user.username }}">{{ user.username }}</a>
+							{% endif %}
+							</h5>
+							{% if usuario.foto_perfil != "" %}
+							<a href="#"><img
+									src="{{ user.foto_perfil }}" width="48" height="48"></a>
+							{% else %}
+							<a href="#"><img
+									src="https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png" width="48" height="48"></a>
+							{% endif %}
+						</div>
+						<div class="col-md-8">
+							<h5>Descripción</h5>
+							<p> <span>El usuario </span>
+								<a class="alert-link" href="/users/perfil/?username={{ user.username }}">
+									<span>{{ user.username }} </span>
+								</a>
+								<span> quiere ser tu amig@</span>
+							</p>
+							<div class="row">
+								<form action="/users/aceptarPeticion" method="post">
+									<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+									<button type="submit" class="btn btn-success">
+										<span>Aceptar petición</span>
+									</button>
+								</form>
+								<form action="/users/rechazarPeticion" method="post">
+									<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
+									<button type="submit" class="btn btn-danger">
+										<span>Rechazar petición</span>
+									</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+	<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+	<div class="row text-center">
+		<ul class="pagination">
+			<!-- Primera -->
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-peticiones?pg=1">Primera</a>
+			</li>
+			<!-- Anterior (si la hay ) -->
+			{% if pgActual-1 >= 1 %}
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual -1 }}">{{ pgActual -1 }}</a>
+			</li>
+			{% endif %}
+			<!-- Actual -->
+			<li class="page-item active">
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual }}">{{ pgActual }}</a>
+			</li>
+			<!-- Siguiente (si la hay) -->
+			{% if pgActual+1 <= pgUltima %}
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgActual+1 }}">{{ pgActual+1 }}</a>
+			</li>
+			{% endif %}
+			<!-- Última -->
+			<li class="page-item">
+				<a class="page-link" href="/users/lista-peticiones?pg={{ pgUltima }}">Última</a>
+			</li>
+		</ul>
+	</div>
+
+</main>
+
+{% endblock %}

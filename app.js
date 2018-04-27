@@ -61,6 +61,31 @@ app.use(expressSession({
 
 //==========PERMISOS DE RUTAS=======
 
+// routerUsuarioToken
+var routerUsuarioToken = express.Router();
+routerUsuarioToken.use(function (req, res, next) {
+    var token = req.body.token || req.query.token || req.headers['token'];
+    if (token != null) {// verificar el token
+        jwt.verify(token, 'secreto', function (err, infoToken) {
+            if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
+                res.status(403);// Forbidden
+                res.json({acceso: false, error: 'Token invalido o caducado'});
+                return;
+            } else {
+                res.usuario = infoToken.usuario;
+                next();
+            }
+        });
+    } else {
+        res.status(403);// Forbidden
+        res.json({acceso: false, mensaje: 'No hay Token'});
+    }
+});
+
+// Aplicar routerUsuarioToken
+app.use('/api/mensaje*', routerUsuarioToken);
+app.use('/api/usuarios*', routerUsuarioToken);
+
 // routerUsuarioSession
 var routerUsuarioSession = express.Router();
 routerUsuarioSession.use(function (req, res, next) {
@@ -81,6 +106,7 @@ app.use("/chat", routerUsuarioSession);
 
 
 //==========RUTAS================
+
 require("./routes/rapipost.js")(app,gestorDB, fs);
 require("./routes/rapimensajes.js")(app, gestorDB);
 require("./routes/rusuarios.js")(app, swig, gestorDB);
