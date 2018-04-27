@@ -86,7 +86,7 @@
 
                             {% elseif user.seHaEnviadoPeticion == true %}
                             <!-- Cuando se ha enviado la peticion de amistad -->
-                            <div class="alert alert-dismissible alert-success" >
+                            <div class="alert alert-dismissible alert-success" id="enviada_{{ user.username }}">
                                 <strong>Petición de amistad enviada</strong>
                             </div>
 
@@ -94,7 +94,7 @@
                             {% elseif user.esAmigo == false %}
                             <form action="/users/enviarAmistad" method="post">
                                 <input type="hidden" name="peticion" value="{{ user._id.toString() }}" />
-                                <button type="submit" class="btn btn-outline-primary">
+                                <button id="{{ user.username }}" type="submit" class="btn btn-outline-primary">
                                         <span>Enviar petición de amistad a {{ user.username }}</span>
                                 </button>
                             </form>

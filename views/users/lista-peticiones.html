@@ -65,7 +65,7 @@
 							<div class="row">
 								<form action="/users/aceptarPeticion" method="post">
 									<input type="hidden" name="enviador" value="{{ user._id.toString() }}" />
-									<button type="submit" class="btn btn-success">
+									<button id="{{ user.username }}" type="submit" class="btn btn-success">
 										<span>Aceptar petición</span>
 									</button>
 								</form>

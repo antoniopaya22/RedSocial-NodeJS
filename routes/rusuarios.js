@@ -222,7 +222,7 @@ module.exports = function (app, swig, gestorDB) {
             pg = 1;
         }
 
-        gestorDB.getUsuariosPg(criterio, pg, function (usuarios, total) {
+        gestorDB.getAmigosUsuarioPg(criterio, pg, function (usuarios, total) {
             if (usuarios == null) {
                 res.redirect("/users/lista-amigos" + "?mensaje=Problema al mostrar los usuarios amigos" + "&tipoMensaje=alert-danger "+
                     "&tipoError=error");

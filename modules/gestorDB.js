@@ -282,6 +282,23 @@
              }
          });
      },
+     getAmigosUsuarioPg : function (criterio, pg, funcionCallback) {
+         this.mongo.MongoClient.connect(this.app.get('db'), function (err, db) {
+             if (err) {
+                 funcionCallback(null);
+             } else {
+                 var collection = db.collection('usuarios');
+                     collection.find(criterio).skip((pg - 1) * 5).limit(5).toArray(function (err, amigos) {
+                         if (err) {
+                             funcionCallback(null);
+                         } else {
+                             funcionCallback(amigos, amigos.length);
+                         }
+                         db.close();
+                     });
+             }
+         });
+},
      addMensaje : function(mensaje, funcionCallback) {
          this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
              if (err) {
