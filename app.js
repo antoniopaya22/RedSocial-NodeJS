@@ -70,9 +70,8 @@ routerUsuarioToken.use(function (req, res, next) {
             if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
                 res.status(403);// Forbidden
                 res.json({acceso: false, error: 'Token invalido o caducado'});
-                // También podríamos comprobar que intoToken.usuario existe
                 return;
-            } else { // dejamos correr la petición
+            } else {
                 res.usuario = infoToken.usuario;
                 next();
             }

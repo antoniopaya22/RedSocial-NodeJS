@@ -28,21 +28,10 @@
 
     <!-- Mensajes del chat -->
     <div class="chat-history">
-        <ul>
+        <ul id="listaMensajes">
 
-            <!-- Mensaje 1 -->
-            <li class="clearfix">
-                <div class="message-data align-right">
-                    <span class="message-data-time">26/04/2018</span> &nbsp; &nbsp;
-                    <span class="message-data-name">Yo</span> <i class="fa fa-circle me"></i>
 
-                </div>
-                <div class="message other-message float-right">
-                    Hola, que tal todo?
-                </div>
-            </li>
-
-            <!-- Mensaje 2 -->
+            <!-- Mensaje 2
             <li>
                 <div class="message-data">
                     <span class="message-data-name"><i class="fa fa-circle online"></i> Usuario1</span>
@@ -52,18 +41,7 @@
                     Bien o, usted?
                 </div>
             </li>
-
-            <!-- Mensaje 3 -->
-            <li class="clearfix">
-                <div class="message-data align-right">
-                    <span class="message-data-time">26/04/2018</span> &nbsp; &nbsp;
-                    <span class="message-data-name">Yo</span> <i class="fa fa-circle me"></i>
-
-                </div>
-                <div class="message other-message float-right">
-                    Aqui andamios.
-                </div>
-            </li>
+            -->
 
         </ul>
 
@@ -72,8 +50,8 @@
 
     <!-- Enviar mensaje -->
     <div class="chat-message clearfix">
-        <textarea name="message-to-send" id="message-to-send" placeholder="Escribe tu mensaje" rows="3"></textarea>
-        <button>Enviar</button>
+        <textarea name="message-to-send" id="mensajeAenviar" placeholder="Escribe tu mensaje" rows="3"></textarea>
+        <button id="btEnviar" class="botonEnviar">Enviar</button>
 
     </div>
 
@@ -85,73 +63,4 @@
 </div>
 <!-- end chat -->
 </div>
-<script>
-    $.notify({
-        title: "Perfecto: ",
-        message: "Te has logueado correctamente",
-        icon: 'fa fa-check'
-    },{
-        type: "success",
-        delay: 4000
-    });
-</script>
-<script>
-    var amigos;
-
-    function cargarUsuarios(){
-        $.ajax({
-            url: URLbase + "/usuarios/amigos",
-            type: "GET",
-            data: {},
-            dataType: 'json',
-            headers: {"token": token},
-            success: function (respuesta) {
-                amigos = respuesta;
-                actualizarVistaUsuarios(amigos);
-            },
-            error: function (error) {
-                console.log(error);
-                $.notify({
-                    title: "Error: ",
-                    message: "Error al mostrar tus amigos",
-                    icon: 'fa fa-error'
-                },{
-                    type: "danger",
-                    delay: 4000
-                });
-            }
-        });
-    }
-
-    function actualizarVistaUsuarios(usuarios){
-        $("#tituloUsuarioChat").text(usuario.username);
-        $("#listaAmigos").empty();
-        usuarios.forEach(function (amigo) {
-            $("#cargandoAmigos").remove();
-            $("#listaAmigos").append(
-                "<li class='clearfix'>"+
-                "<img src='https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png' width='48' height='48'/>"+
-                "<div class='about'>"+
-                "<div class='name'>"+amigo.username+"</div>"+
-                "<div class='status'>"+
-                "<i class='fa fa-circle online'></i> online"+
-                "</div>"+
-                "</div>"+
-                "</li>"
-            );
-        });
-    }
-
-    cargarUsuarios();
-    $("#busqueda").on("input",function (e) {
-        var usuariosFiltrados = [];
-        var texto = $("#busqueda").val();
-
-        for (i = 0; i < amigos.length; i++){
-            if(amigos[i].username.indexOf(texto) != -1){
-                usuariosFiltrados.push(amigos[i]);
-            }
-        }
-        actualizarVistaUsuarios(usuariosFiltrados);
-    })
-</script>
+<script src="/js/mensajesChat.js"> </script>
