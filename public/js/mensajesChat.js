@@ -35,7 +35,7 @@ function addMensajeVistaMensajes(mensaje, autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data align-right'>" +
-            "<span class='message-data-time'>"+fecha+"</span> &nbsp; &nbsp;" +
+            "<span class='message-data-time'>" + fecha + "</span> &nbsp; &nbsp;" +
             "<span class='message-data-name'>Yo</span> <i class='fa fa-circle me'></i>" +
             "</div>" +
             "<div class='message other-message float-right'>" +
@@ -47,8 +47,8 @@ function addMensajeVistaMensajes(mensaje, autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data'>" +
-            "<span class='message-data-time'>"+fecha+"</span> &nbsp; &nbsp;" +
-            "<span class='message-data-name'>"+mensaje.emisor.username+"</span> <i class='fa fa-circle online'></i>" +
+            "<span class='message-data-time'>" + fecha + "</span> &nbsp; &nbsp;" +
+            "<span class='message-data-name'>" + mensaje.emisor.username + "</span> <i class='fa fa-circle online'></i>" +
             "</div>" +
             "<div class='message my-message'>" +
             mensaje.contenido +
@@ -60,14 +60,14 @@ function addMensajeVistaMensajes(mensaje, autor) {
 
 function actualizarMensajes(mensajes) {
     mensajes = JSON.parse(mensajes);
-    mensajes = mensajes.sort(function(a, b) {
+    mensajes = mensajes.sort(function (a, b) {
         return new Date(a.fecha).getTime() < new Date(b.fecha).getTime();
     });
     for (var i = 0; i < mensajes.length; i++) {
-        if(mensajes[i].emisor.username == usuario.username){
-            addMensajeVistaMensajes(mensajes[i],true);
-        } else{
-            addMensajeVistaMensajes(mensajes[i],false);
+        if (mensajes[i].emisor.username == usuario.username) {
+            addMensajeVistaMensajes(mensajes[i], true);
+        } else {
+            addMensajeVistaMensajes(mensajes[i], false);
         }
     }
 }
@@ -86,7 +86,7 @@ function cambiarChat(username) {
         headers: {"token": token},
         success: function (respuesta) {
             actualizarMensajes(respuesta);
-            document.getElementById('div_listaMensajes').scrollBy(0,1000);
+            document.getElementById('div_listaMensajes').scrollBy(0, 1000);
         },
         error: function (error) {
             console.log(error);
@@ -111,7 +111,7 @@ function actualizarVistaUsuarios(usuarios) {
             "<li class='clearfix'>" +
             "<img src='https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png' width='48' height='48'/>" +
             "<div class='about'>" +
-            "<div class='name_amigo'><button onclick='cambiarChat(\""+amigo.username+"\")'>" + amigo.username + "</button></div>" +
+            "<div class='name_amigo'><button class='amigo' onclick='cambiarChat(\"" + amigo.username + "\")'>" + amigo.username + "</button></div>" +
             "<div class='status'>" +
             "<i class='fa fa-circle online'></i> online" +
             "</div>" +
@@ -120,7 +120,6 @@ function actualizarVistaUsuarios(usuarios) {
         );
     });
 }
-
 
 
 $("#busqueda").on("input", function (e) {
