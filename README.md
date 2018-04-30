@@ -1,15 +1,23 @@
-# RedSocial
-[![Build Status](https://travis-ci.com/antonioalfa22/RedSocial-NodeJS.svg?token=paxWmMD1E3zNeS1ssC5y&branch=master)](https://travis-ci.com/antonioalfa22/RedSocial-NodeJS)
+---
+description: Red social realizada con NodeJS y Express.
+---
 
-*Repositorio con las pruebas hechas con Selenium (rama **master-NodeJS**) -> [RedSocial-SDI-Test](https://github.com/antonioalfa22/RedSocial-SDI-Test)*
+# Red Social - SDI
 
-## Descripción
+## Introducción
 
-Esta aplicación se trata de una red social en la que los usuarios pueden registrarse, crear publicaciones, enviar
-invitaciones de amistad, listar usuarios registrados y el resto de opciones que comúnmente se pueden hacer en 
-una red social.
+La aplicación RedSocial tiene como funcionalidad principal proporcionar una plataforma web realizada con NodeJS que permita a los usuarios registrarse en la aplicación, agregar amigos, crear publicaciones y listar las publicaciones de sus amigos.
 
-## Autores
+El conjunto de toda la funcionalidad que cumple la aplicación se encuentra más detallada en el apartado Funcionalidad y los casos de uso de la misma en el apartado Casos de uso.
 
-* Antonio Payá González(UO251065)
-* Pablo Díaz Rancaño(UO251017)
+![P&#xE1;gina de Login de la aplicaci&#xF3;n.](.gitbook/assets/login.png)
+
+Este proyecto está realizado a partir de un proyecto similar con Spring Boot \([aquí su repositorio](https://github.com/antonioalfa22/RedSocial-SDI)\), pero en este caso vamos a añadirle funcionalidad como puede ser una API-Rest o un chat.
+
+### Autores
+
+* [Antonio Payá González](https://github.com/antonioalfa22)
+* [Pablo Díaz Rancaño](https://github.com/PablooD9)
+
+
+
