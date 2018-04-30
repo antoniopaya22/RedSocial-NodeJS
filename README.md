@@ -9,6 +9,10 @@ Esta aplicación se trata de una red social en la que los usuarios pueden regist
 invitaciones de amistad, listar usuarios registrados y el resto de opciones que comúnmente se pueden hacer en 
 una red social.
 
+## Documentación
+
+Documentación disponible en formato web [aquí](https://course1718-e4a1.gitbook.io/redsocialsdi/)
+
 ## Autores
 
 * Antonio Payá González(UO251065)
