@@ -109,8 +109,9 @@ module.exports = function (app, gestorDB) {
         });
     });
 
+
     /**
-     * UPDATE mensaje: Marcar o no un mensaje como leidoS
+     * UPDATE mensaje: Marcar o no un mensaje como leido
      */
     app.put("/api/mensajes/:id",function (req,res) {
         var usuario;

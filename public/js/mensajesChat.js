@@ -85,7 +85,7 @@ function actualizarVistaUsuarios(usuarios) {
     $("#listaAmigos").empty();
     usuarios.forEach(function (amigo) {
         var mensajesNoLeidos = amigo.mensajes.filter(function (x) {
-            return !x.leido;
+            return !x.leido && x.destino == usuario._id;
         }).length;
         $("#cargandoAmigos").remove();
         var cadena =
@@ -107,7 +107,14 @@ function actualizarVistaUsuarios(usuarios) {
                 "</div>" +
                 "</li>";
         }
-        $("#listaAmigos").append(cadena);
+        amigo.mensajesNoLeidos = mensajesNoLeidos;
+        amigo.cadena = cadena;
+    });
+    usuarios.sort(function (a, b) {
+        return a.mensajesNoLeidos < b.mensajesNoLeidos;
+    });
+    usuarios.forEach(function (x) {
+        $("#listaAmigos").append(x.cadena);
     });
 }
 
@@ -151,12 +158,13 @@ function actualizarMensajes(mensajes) {
  * @param autor, true si el autor es el usuario en sesión.
  */
 function addMensajeVistaMensajes(mensaje, autor) {
-    var fecha = mensaje.fecha;
+    var fecha = new Date(mensaje.fecha);
+    var leido = mensaje.leido ? "(leido)" : "";
     if (autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data align-right'>" +
-            "<span class='message-data-time'>" + fecha + "</span> &nbsp; &nbsp;" +
+            "<span class='message-data-time'>" + fecha.toLocaleString() + "</span> &nbsp; &nbsp;" +
             "<span class='message-data-name'>Yo</span> <i class='fa fa-circle me'></i>" +
             "</div>" +
             "<div class='message other-message float-right'>" +
@@ -168,7 +176,7 @@ function addMensajeVistaMensajes(mensaje, autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data'>" +
-            "<span class='message-data-time'>" + fecha + "</span> &nbsp; &nbsp;" +
+            "<span class='message-data-time'>" + fecha.toLocaleString() + " "+ leido + "</span> &nbsp; &nbsp;" +
             "<span class='message-data-name'>" + mensaje.emisor.username + "</span> <i class='fa fa-circle online'></i>" +
             "</div>" +
             "<div class='message my-message'>" +
@@ -179,9 +187,12 @@ function addMensajeVistaMensajes(mensaje, autor) {
     }
 }
 
+
 //==================EVENTOS==============================
 
-
+/**
+ * Buscar usuario
+ */
 $("#busqueda").on("input", function (e) {
     var usuariosFiltrados = [];
     var texto = $("#busqueda").val();
@@ -194,6 +205,9 @@ $("#busqueda").on("input", function (e) {
     actualizarVistaUsuarios(usuariosFiltrados);
 });
 
+/**
+ * Enviar mensaje
+ */
 $("#btEnviar").click(function () {
     $.ajax({
         url: URLbase + "/mensajes",
@@ -205,7 +219,12 @@ $("#btEnviar").click(function () {
         dataType: 'json',
         headers: {"token": token},
         success: function (respuesta) {
-            cambiarChat(chatActivo.username);
+            cargarMensajes(function () {
+                //Cuando se han cargado los mensajes
+                $("#listaMensajes").empty();
+                actualizarMensajes(chatActivo.mensajes);
+                document.getElementById('div_listaMensajes').scrollBy(0, 1000);
+            });
         },
         error: function (error) {
             console.log(error);
@@ -234,3 +253,44 @@ $.notify({
 //=================RUN====================
 
 cargarUsuarios();
+
+/**
+ * Actualizamos los mensajes cada 3 segundos
+ */
+setInterval(function () {
+    cargarMensajes(function () {
+        //Cuando se han cargado los mensajes
+        actualizarVistaUsuarios(amigos);
+        cambiarChat(chatActivo.username);
+        document.getElementById('div_listaMensajes').scrollBy(0, 1000);
+
+        chatActivo.mensajes.forEach(function (x) {
+            //Marcamos como leidos los mensajes del chat
+            if(x.destino == usuario._id){
+                $.ajax({
+                    url: URLbase + "/mensajes/"+x._id.toString(),
+                    type: "PUT",
+                    data: {
+                        leido:true
+                    },
+                    dataType: 'json',
+                    headers: {"token": token},
+                    success: function (respuesta) {
+                        x.leido = true;
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        $.notify({
+                            title: "Error: ",
+                            message: "Error al marcar como leido el mensaje",
+                            icon: 'fa fa-error'
+                        }, {
+                            type: "danger",
+                            delay: 4000
+                        });
+                    }
+                });
+            }
+        });
+    });
+},3000);
