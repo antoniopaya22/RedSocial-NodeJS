@@ -21,7 +21,7 @@ module.exports = function (app, gestorDB) {
         var mensaje = {
             contenido: req.body.contenido,
             fecha: new Date(),
-            emisor: usuario,
+            emisor: {"_id":usuario._id, "username": usuario.username},
             destino: req.body.destino,
             leido: false
         };
@@ -36,7 +36,7 @@ module.exports = function (app, gestorDB) {
                 res.json({error: "se ha producido un error"});
             }else{
                 var flag = usuarios.find(function(x) {
-                    return x.username.localeCompare(mensaje.destino);
+                    return x._id.toString() == mensaje.destino;
                 }).length;
                 if( flag <= 0){
                     res.status(500);
@@ -94,10 +94,10 @@ module.exports = function (app, gestorDB) {
                 res.json({error: "Se ha producido un error"});
             } else {
                 var mensajesFiltrados = mensajes.filter(function (x) {
-                    if(x.emisor._id == usuario._id.toString() && x.destino._id == req.params.id){
+                    if(x.emisor._id == usuario._id && x.destino == req.params.id){
                         return true;
                     }
-                    else if(x.destino._id == usuario._id.toString() && x.emisor._id == req.params.id){
+                    else if(x.destino == usuario._id && x.emisor._id == req.params.id){
                         return true;
                     }
                     else
@@ -109,6 +109,50 @@ module.exports = function (app, gestorDB) {
         });
     });
 
+    /**
+     * UPDATE mensaje: Marcar o no un mensaje como leidoS
+     */
+    app.put("/api/mensajes/:id",function (req,res) {
+        var usuario;
+        var token = req.body.token || req.query.token || req.headers['token'];
+        app.get('jwt').verify(token, 'secreto', function (err, infoToken) {
+            if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
+                res.status(403);// Forbidden
+                res.json({acceso: false, error: 'Token invalido o caducado'});
+                return;
+            } else {
+                usuario = infoToken.usuario;
+            }
+        });
+        var criterio = {"_id": gestorDB.mongo.ObjectId(req.params.id)}
+        gestorDB.getMensajes(criterio, function (mensajes) {
+            if (mensajes == null) {
+                res.status(500);
+                res.json({error: "Se ha producido un error"});
+            } else {
+                if(mensajes.length == 0){
+                    res.status(403);// Forbidden
+                    res.json({error: 'No existe el mensaje'});
+                }
+                else if(mensajes[0].destino != usuario._id){
+                    res.status(403);// Forbidden
+                    res.json({error: 'El usuario debe ser el destino del mensaje para marcarlo como leido'});
+                }else{
+                    var mensaje = mensajes[0];
+                    mensaje.leido = req.body.leido;
+                    gestorDB.editMensaje(criterio,mensaje,function (result) {
+                        if (result == null) {
+                            res.status(500);
+                            res.json({error: "Se ha producido un error"})
+                        } else {
+                            res.status(200);
+                            res.json({mensaje: "Mensaje modificado", _id: result})
+                        }
+                    });
+                }
+            }
+        });
+    });
 
 
     //=========USUARIOS Y AUTENTICACION===========================
