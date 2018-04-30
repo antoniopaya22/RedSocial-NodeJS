@@ -130,6 +130,7 @@ function cambiarChat(username) {
     });
     $("#tituloUsuarioChat").text(chatActivo.username);
     $("#listaMensajes").empty();
+    $("#numMensajes").text("Hay "+chatActivo.mensajes.length+" mensajes en la conversación");
     
     actualizarMensajes(chatActivo.mensajes);
     document.getElementById('div_listaMensajes').scrollBy(0, 1000);
@@ -164,7 +165,7 @@ function addMensajeVistaMensajes(mensaje, autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data align-right'>" +
-            "<span class='message-data-time'>" + fecha.toLocaleString() + "</span> &nbsp; &nbsp;" +
+            "<span class='message-data-time'>" + fecha.toLocaleString() + " "+ leido +"</span> &nbsp; &nbsp;" +
             "<span class='message-data-name'>Yo</span> <i class='fa fa-circle me'></i>" +
             "</div>" +
             "<div class='message other-message float-right'>" +
@@ -176,7 +177,7 @@ function addMensajeVistaMensajes(mensaje, autor) {
         $("#listaMensajes").prepend(
             "<li class='clearfix'>" +
             "<div class='message-data'>" +
-            "<span class='message-data-time'>" + fecha.toLocaleString() + " "+ leido + "</span> &nbsp; &nbsp;" +
+            "<span class='message-data-time'>" + fecha.toLocaleString() +"</span> &nbsp; &nbsp;" +
             "<span class='message-data-name'>" + mensaje.emisor.username + "</span> <i class='fa fa-circle online'></i>" +
             "</div>" +
             "<div class='message my-message'>" +
@@ -205,39 +206,44 @@ $("#busqueda").on("input", function (e) {
     actualizarVistaUsuarios(usuariosFiltrados);
 });
 
+
 /**
  * Enviar mensaje
  */
 $("#btEnviar").click(function () {
-    $.ajax({
-        url: URLbase + "/mensajes",
-        type: "POST",
-        data: {
-            contenido: $("#mensajeAenviar").val(),
-            destino: chatActivo._id
-        },
-        dataType: 'json',
-        headers: {"token": token},
-        success: function (respuesta) {
-            cargarMensajes(function () {
-                //Cuando se han cargado los mensajes
-                $("#listaMensajes").empty();
-                actualizarMensajes(chatActivo.mensajes);
-                document.getElementById('div_listaMensajes').scrollBy(0, 1000);
-            });
-        },
-        error: function (error) {
-            console.log(error);
-            $.notify({
-                title: "Error: ",
-                message: "Error al enviar el mensaje",
-                icon: 'fa fa-error'
-            }, {
-                type: "danger",
-                delay: 4000
-            });
-        }
-    });
+    if($("#mensajeAenviar").val() != ""){
+        $.ajax({
+            url: URLbase + "/mensajes",
+            type: "POST",
+            data: {
+                contenido: $("#mensajeAenviar").val(),
+                destino: chatActivo._id
+            },
+            dataType: 'json',
+            headers: {"token": token},
+            success: function (respuesta) {
+                cargarMensajes(function () {
+                    //Cuando se han cargado los mensajes
+                    $("#listaMensajes").empty();
+                    $("#mensajeAenviar").val("");
+                    window.scrollTo(0,0);
+                    actualizarMensajes(chatActivo.mensajes);
+                    document.getElementById('div_listaMensajes').scrollBy(0, 1000);
+                });
+            },
+            error: function (error) {
+                console.log(error);
+                $.notify({
+                    title: "Error: ",
+                    message: "Error al enviar el mensaje",
+                    icon: 'fa fa-error'
+                }, {
+                    type: "danger",
+                    delay: 4000
+                });
+            }
+        });
+    }
 });
 
 $.notify({

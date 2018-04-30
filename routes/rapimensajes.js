@@ -60,14 +60,35 @@ module.exports = function (app, gestorDB) {
      * GET mensaje :id
      */
     app.get("/api/mensajes/:id", function (req, res) {
+        var usuario;
+        var token = req.body.token || req.query.token || req.headers['token'];
+        app.get('jwt').verify(token, 'secreto', function (err, infoToken) {
+            if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
+                res.status(403);// Forbidden
+                res.json({acceso: false, error: 'Token invalido o caducado'});
+                return;
+            } else {
+                usuario = infoToken.usuario;
+            }
+        });
         var criterio = {"_id": gestorDB.mongo.ObjectId(req.params.id)}
         gestorDB.getMensajes(criterio, function (mensajes) {
-            if (mensajes == null) {
-                res.status(500);
-                res.json({error: "Se ha producido un error"});
-            } else {
+            if(mensajes.length == 0){
+                res.status(404);
+                res.json({error: 'Mensaje no encontrado'});
+            }else{
+                var mensajesFiltrados = mensajes.filter(function (x) {
+                    if(x.emisor._id == usuario._id && x.destino == req.params.id){
+                        return true;
+                    }
+                    else if(x.destino == usuario._id && x.emisor._id == req.params.id){
+                        return true;
+                    }
+                    else
+                        return false;
+                });
                 res.status(200);
-                res.json(JSON.stringify(mensajes[0]));
+                res.json(JSON.stringify(mensajesFiltrados[0]));
             }
         });
     });
