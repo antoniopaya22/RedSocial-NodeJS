@@ -11,7 +11,7 @@ una red social.
 
 ## Documentación
 
-Documentación disponible en formato web [aquí](https://redsocialsdi.gitbook.io/redsocialsdi/)
+Documentación disponible en formato web [aquí](https://redsocialsdi.gitbook.io/nodejs)
 
 ## Autores
 
