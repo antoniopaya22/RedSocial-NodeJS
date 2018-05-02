@@ -1,6 +1,6 @@
 var token;
 var usuario;
-var URLbase = "http://localhost:8081/api";
+var URLbase = "/api";
 
 $("#body").load("widget-login.html");
 
