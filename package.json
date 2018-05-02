@@ -4,6 +4,7 @@
   "description": "RedSocial realizada por Antonio Paya Gonzalez y Pablo Diaz Rancaño",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": "",
