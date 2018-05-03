@@ -29,11 +29,17 @@ module.exports = function (app, swig, gestorDB) {
             pg = 1;
         }
 
+        // Array de likes dados a publicaciones
+        var likes = req.session.usuario.likes;
+
+        if (likes == null)
+            likes = [];
+
         gestorDB.getPostPg( criterio, pg, function(post, total) {
             if (post == null) {
                 post = {}
-
             }
+
             var pgUltima = total/4;
             if (total % 4 > 0 ){
                 pgUltima = pgUltima+1;
@@ -45,16 +51,35 @@ module.exports = function (app, swig, gestorDB) {
                         return y.username == x.autor;
                     });
                 });
-                var respuesta = swig.renderFile('views/bpanel.html', {
-                    post : post,
-                    pgActual : pg,
-                    pgUltima : pgUltima,
-                    usuario : req.session.usuario
+
+                var numAmigos = 0;
+
+                usuarios.forEach( function (usuario) {
+                    if (usuario.amigos != null && usuario.amigos.includes( req.session.usuario._id.toString() ))
+                        numAmigos++;
                 });
 
-                app.get('logger').trace("Usuario " + req.session.usuario.username + " ha accedido al panel");
+                gestorDB.getPost({ autor : req.session.usuario.username }, function(postsTotales, total){
+                    var numComentarios = 0;
+                    postsTotales.forEach( function(post) {
+                       numComentarios += post.comentarios.length;
+                    });
 
-                res.send(respuesta);
+                    var respuesta = swig.renderFile('views/bpanel.html', {
+                        post : post,
+                        pgActual : pg,
+                        pgUltima : pgUltima,
+                        usuario : req.session.usuario,
+                        likes : likes,
+                        numPosts : postsTotales.length,
+                        numComentarios : numComentarios,
+                        numAmigos : numAmigos
+                    });
+
+                    app.get('logger').trace("Usuario " + req.session.usuario.username + " ha accedido al panel");
+
+                    res.send(respuesta);
+                });
             });
 
         });
