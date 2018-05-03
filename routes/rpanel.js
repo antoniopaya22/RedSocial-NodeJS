@@ -21,7 +21,8 @@ module.exports = function (app, swig, gestorDB) {
         var criterio = {};
 
         if( req.query.busqueda != null ){
-            criterio = { "titulo" : {$regex : ".*"+req.query.busqueda+".*"} };
+            criterio = { "titulo" : {$regex : ".*"+req.query.busqueda+".*"}
+            };
         }
 
         var pg = parseInt(req.query.pg);
@@ -35,28 +36,30 @@ module.exports = function (app, swig, gestorDB) {
         if (likes == null)
             likes = [];
 
-        gestorDB.getPostPg( criterio, pg, function(post, total) {
-            if (post == null) {
-                post = {}
-            }
+        gestorDB.getUsuarios({}, function (usuarios) {
+            var amigos = [ req.session.usuario.username ];
 
-            var pgUltima = total/4;
-            if (total % 4 > 0 ){
-                pgUltima = pgUltima+1;
-            }
+            usuarios.forEach( function (usuario) {
+                if (usuario.amigos != null && usuario.amigos.includes( req.session.usuario._id.toString() ))
+                    amigos.push( usuario.username );
+            });
 
-            gestorDB.getUsuarios({}, function (usuarios) {
+            criterio.autor = { $in : amigos };
+
+            gestorDB.getPostPg( criterio, pg, function(post, total) {
+                if (post == null) {
+                    post = {}
+                }
+
+                var pgUltima = total/4;
+                if (total % 4 > 0 ){
+                    pgUltima = pgUltima+1;
+                }
+
                 post.forEach(function(x) {
                     x.autor = usuarios.find(function (y) {
                         return y.username == x.autor;
                     });
-                });
-
-                var numAmigos = 0;
-
-                usuarios.forEach( function (usuario) {
-                    if (usuario.amigos != null && usuario.amigos.includes( req.session.usuario._id.toString() ))
-                        numAmigos++;
                 });
 
                 gestorDB.getPost({ autor : req.session.usuario.username }, function(postsTotales, total){
@@ -73,7 +76,7 @@ module.exports = function (app, swig, gestorDB) {
                         likes : likes,
                         numPosts : postsTotales.length,
                         numComentarios : numComentarios,
-                        numAmigos : numAmigos
+                        numAmigos : amigos.length
                     });
 
                     app.get('logger').trace("Usuario " + req.session.usuario.username + " ha accedido al panel");

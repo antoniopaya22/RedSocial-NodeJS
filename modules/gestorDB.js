@@ -145,7 +145,7 @@ module.exports = {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('publicaciones');
-                collection.count(function (err, count) {
+                collection.count(criterio, function (err, count) {
                     collection.find(criterio).skip((pg - 1) * 4).limit(4)
                         .toArray(function (err, post) {
                             if (err) {
