@@ -49,8 +49,7 @@ module.exports = function (app, gestorDB) {
                             res.json({error: "Se ha producido un error"});
                         } else {
                             res.status(201);
-                            app.get('logger').info("Usuario " + usuario.username + " ha enviado un mensaje en el chat" +
-                                " al usuario con ID " + id);
+                            app.get('logger').info("Mensaje enviado en el chat al usuario con ID " + id);
                             res.json({mensaje: "Mensaje creado correctamente", _id: id, mensaje:mensaje});
                         }
                     });

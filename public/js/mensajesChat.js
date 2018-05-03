@@ -1,5 +1,7 @@
 var amigos;
 var chatActivo;
+var nuevoMensaje = false; // para pasar a un usuario de la lista de amigos a la cabeza, cuando
+                            // se le envia un mensaje
 
 
 /**
@@ -92,7 +94,7 @@ function actualizarVistaUsuarios(usuarios) {
             "<li class='clearfix'>" +
             "<img src='https://ssl.gstatic.com/images/branding/product/1x/avatar_circle_blue_512dp.png' width='48' height='48'/>" +
             "<div class='about'>" +
-            "<div class='name_amigo'><button class='amigo' onclick='cambiarChat(\"" + amigo.username + "\")'>" + amigo.username + "</button></div>" +
+            "<div class='name_amigo'><button id='chat_" + amigo.username + "' class='amigo' onclick='cambiarChat(\"" + amigo.username + "\")'>" + amigo.username + "</button></div>" +
             "<div class='status'>";
         if(mensajesNoLeidos > 0){
             cadena +=
@@ -113,6 +115,16 @@ function actualizarVistaUsuarios(usuarios) {
     usuarios.sort(function (a, b) {
         return a.mensajesNoLeidos < b.mensajesNoLeidos;
     });
+    if (nuevoMensaje) {
+        usuarios.forEach(function (usuario, indice) {
+            if (usuario.username == chatActivo.username) {
+                var usuario_copia = usuarios[0];
+                usuarios[0] = usuario;
+                usuarios[indice] = usuario_copia;
+                nuevoMensaje = false;
+            }
+        });
+    }
     usuarios.forEach(function (x) {
         $("#listaAmigos").append(x.cadena);
     });
@@ -205,6 +217,7 @@ function addMensajeVistaMensajes(mensaje, autor) {
             "</li>"
         );
     }
+
 }
 
 
@@ -243,6 +256,8 @@ $("#btEnviar").click(function () {
             dataType: 'json',
             headers: {"token": token},
             success: function (respuesta) {
+                nuevoMensaje = true;
+
                 cargarMensajes(function () {
                     //Cuando se han cargado los mensajes
                     $("#listaMensajes").empty();
