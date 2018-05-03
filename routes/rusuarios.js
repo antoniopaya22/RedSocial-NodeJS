@@ -253,8 +253,8 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
-    /*
-        GET: Perfil
+    /**
+     * GET: Perfil
      */
     app.get("/users/perfil", function (req, res) {
         var criterio = {
@@ -284,8 +284,32 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
-    /*
-        GET: Listar peticiones de amistad
+    /**
+     * POST: Editar datos personales
+    */
+    app.post("/users/perfil", function(req, res){
+        var criterio = {"_id":  req.session.usuario._id};
+        var usuario = {
+            nombre: req.body.nombre,
+            apellidos: req.body.apellidos,
+        }
+        req.session.usuario.nombre = req.body.nombre;
+        req.session.usuario.apellidos = req.body.apellidos;
+        gestorDB.editUser(criterio, usuario, function (id) {
+            if (id == null) {
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al actualizar tus datos"
+                });
+                res.send(respuesta);
+            } else {
+                res.redirect("/panel?mensaje=Tus datos se han modificado correctamente");
+            }
+        });
+    });
+
+    /**
+     * GET: Listar peticiones de amistad
      */
     app.get("/users/lista-peticiones", function(req, res){
         var criterio = { "id_recibidor" : req.session.usuario._id.toString() };
@@ -326,8 +350,8 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
-    /*
-        POST: Aceptar petición
+    /**
+     * POST: Aceptar petición
      */
     app.post("/users/aceptarPeticion", function(req, res){
         var id_enviador = req.body.enviador;
@@ -383,8 +407,8 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
-    /*
-        POST: Rechazar petición
+    /**
+     * POST: Rechazar petición
      */
     app.post("/users/rechazarPeticion", function(req, res){
         var id_enviador = req.body.enviador.toString();
@@ -407,4 +431,5 @@ module.exports = function (app, swig, gestorDB) {
             }
         });
     });
+
 };

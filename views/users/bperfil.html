@@ -135,23 +135,16 @@
                         <h4 class="line-head">Editar datos personales</h4>
 
                         <!-- Formulario -->
-                        <form method="post" action="/user">
+                        <form method="post" action="/users/perfil">
                             <div class="row mb-4">
                                 <div class="col-md-4">
                                     <label>Nombre</label>
-                                    <input class="form-control" type="text" name="nombre">
+                                    <input class="form-control" type="text" name="nombre" placeholder="{{ user.nombre }}">
                                 </div>
                                 <div class="col-md-4">
                                     <label>Apellidos</label>
-                                    <input class="form-control" type="text" name="apellidos">
+                                    <input class="form-control" type="text" name="apellidos" placeholder="{{ user.apellidos }}">
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8 mb-4">
-                                    <label>Email</label>
-                                    <input class="form-control" type="text" name="email">
-                                </div>
-                                <div class="clearfix"></div>
                             </div>
                             <div class="row mb-10">
                                 <div class="col-md-12">

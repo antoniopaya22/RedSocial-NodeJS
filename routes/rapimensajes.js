@@ -45,11 +45,11 @@ module.exports = function (app, gestorDB) {
                     gestorDB.addMensaje(mensaje, function (id) {
                         if (id == null) {
                             res.status(500);
-                            app.get('logger').error("Error al enviar un mensaje por el usuario " + req.session.usuario.username);
+                            app.get('logger').error("Error al enviar un mensaje por el usuario " + usuario.username);
                             res.json({error: "Se ha producido un error"});
                         } else {
                             res.status(201);
-                            app.get('logger').info("Usuario " + req.session.usuario.username + " ha enviado un mensaje en el chat" +
+                            app.get('logger').info("Usuario " + usuario.username + " ha enviado un mensaje en el chat" +
                                 " al usuario con ID " + id);
                             res.json({mensaje: "Mensaje creado correctamente", _id: id, mensaje:mensaje});
                         }
@@ -98,10 +98,11 @@ module.exports = function (app, gestorDB) {
 
     /**
      * GET all mensajes from conversation
-     * Param: id destino
+     * Query: amigo -> Id del usuario amigo
      */
-    app.get("/api/mensajes/all/:id", function (req, res) {
+    app.get("/api/mensajes", function (req, res) {
         var usuario;
+        var id = req.query.amigo;
         var token = req.body.token || req.query.token || req.headers['token'];
         app.get('jwt').verify(token, 'secreto', function (err, infoToken) {
             if (err || (Date.now() / 1000 - infoToken.tiempo) > 24000) {
@@ -118,10 +119,10 @@ module.exports = function (app, gestorDB) {
                 res.json({error: "Se ha producido un error"});
             } else {
                 var mensajesFiltrados = mensajes.filter(function (x) {
-                    if(x.emisor._id == usuario._id && x.destino == req.params.id){
+                    if(x.emisor._id == usuario._id && x.destino == id){
                         return true;
                     }
-                    else if(x.destino == usuario._id && x.emisor._id == req.params.id){
+                    else if(x.destino == usuario._id && x.emisor._id == id){
                         return true;
                     }
                     else

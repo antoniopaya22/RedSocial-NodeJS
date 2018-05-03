@@ -50,7 +50,7 @@ function cargarMensajes(funcionCallback) {
     amigos.forEach(function (x) {
         x.mensajes = [];
         $.ajax({
-            url: URLbase + "/mensajes/all/" + x._id.toString(),
+            url: URLbase + "/mensajes?amigo=" + x._id.toString(),
             type: "GET",
             data: {},
             dataType: 'json',
@@ -137,6 +137,25 @@ function cambiarChat(username) {
 }
 
 /**
+ * Actualiza los nuevos mensajes del chat activo
+ * @param mensajesAnteriores -> mensajes ya cargados en el chat
+ */
+function actualizarChatActual(mensajesAnteriores) {
+    $("#numMensajes").text("Hay "+chatActivo.mensajes.length+" mensajes en la conversación");
+
+    if(mensajesAnteriores.length < chatActivo.mensajes){
+        actualizarMensajes(chatActivo.mensajes.filter(function (x) {
+            var flag = true;
+            mensajesAnteriores.forEach(function (y) {
+               if(y._id == x._id) flag = false;
+            })
+            return flag;
+        }));
+        document.getElementById('div_listaMensajes').scrollBy(0, 1000);
+    }
+}
+
+/**
  * Actualiza la vista de mensajes y los ordena por fecha.
  * @param mensajes
  */
@@ -201,6 +220,8 @@ $("#busqueda").on("input", function (e) {
     for (i = 0; i < amigos.length; i++) {
         if (amigos[i].username.indexOf(texto) != -1) {
             usuariosFiltrados.push(amigos[i]);
+        }else if(amigos[i].email.indexOf(texto) != -1) {
+            usuariosFiltrados.push(amigos[i]);
         }
     }
     actualizarVistaUsuarios(usuariosFiltrados);
@@ -264,11 +285,11 @@ cargarUsuarios();
  * Actualizamos los mensajes cada 3 segundos
  */
 setInterval(function () {
+    var mensajesAnteriores = chatActivo.mensajes;
     cargarMensajes(function () {
         //Cuando se han cargado los mensajes
         actualizarVistaUsuarios(amigos);
-        cambiarChat(chatActivo.username);
-        document.getElementById('div_listaMensajes').scrollBy(0, 1000);
+        actualizarChatActual(mensajesAnteriores);
 
         chatActivo.mensajes.forEach(function (x) {
             //Marcamos como leidos los mensajes del chat

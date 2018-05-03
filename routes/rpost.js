@@ -202,6 +202,7 @@ module.exports = function (app, swig, gestorDB, fs) {
                                 error: "Error 500",
                                 mensaje: "Error al subir la foto"
                             });
+                            res.send(respuesta);
                         } else {
                             res.redirect("/panel?mensaje=Publicacion creada correctamente");
                         }
