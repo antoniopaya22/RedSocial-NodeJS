@@ -45,9 +45,12 @@ module.exports = function (app, gestorDB) {
                     gestorDB.addMensaje(mensaje, function (id) {
                         if (id == null) {
                             res.status(500);
+                            app.get('logger').error("Error al enviar un mensaje por el usuario " + req.session.usuario.username);
                             res.json({error: "Se ha producido un error"});
                         } else {
                             res.status(201);
+                            app.get('logger').info("Usuario " + req.session.usuario.username + " ha enviado un mensaje en el chat" +
+                                " al usuario con ID " + id);
                             res.json({mensaje: "Mensaje creado correctamente", _id: id, mensaje:mensaje});
                         }
                     });
@@ -226,6 +229,9 @@ module.exports = function (app, gestorDB) {
             } else {
                 var token = app.get('jwt').sign({usuario: usuarios[0], tiempo: Date.now() / 1000}, "secreto");
                 res.status(200);
+
+                app.get('logger').trace("Usuario " + usuarios[0].username + " ha accedido al chat");
+
                 res.json({autenticado: true, token: token, usuario: usuarios[0]});
             }
         });

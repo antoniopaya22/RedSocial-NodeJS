@@ -51,6 +51,9 @@ module.exports = function (app, swig, gestorDB) {
                     pgUltima : pgUltima,
                     usuario : req.session.usuario
                 });
+
+                app.get('logger').trace("Usuario " + req.session.usuario.username + " ha accedido al panel");
+
                 res.send(respuesta);
             });
 

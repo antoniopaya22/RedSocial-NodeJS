@@ -28,6 +28,11 @@ var crypto = require('crypto');
 var rest = require('request');
 var execSync = require('child_process').execSync;
 var jwt = require('jsonwebtoken');
+var log4js = require('log4js');
+log4js.configure({
+    appenders: { cheese: { type: 'file', filename: 'redSocialNJ.log' } },
+    categories: { default: { appenders: ['cheese'], level: 'all' } }
+});
 
 //==========VARIABLES===============
 app.set('port', 8081);
@@ -36,6 +41,7 @@ app.set('clave', 'abcdefg');
 app.set('crypto', crypto);
 app.set('rest',rest);
 app.set('jwt', jwt);
+app.set('logger', log4js.getLogger('redSocialNJ'));
 
 //==========INICIACION=============
 app.use(function(req, res, next) {

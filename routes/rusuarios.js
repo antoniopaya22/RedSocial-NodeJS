@@ -37,7 +37,11 @@ module.exports = function (app, swig, gestorDB) {
             if (id == null)
                 res.redirect("/users/lista-usuarios?mensaje=Error al enviar la petición de amistad");
             else
+            {
+                app.get('logger').info("Usuario " + req.session.usuario.username + " ha enviado una petición de amistad" +
+                    " al usuario con ID " + id);
                 res.redirect("/users/lista-usuarios?mensaje=Petición de amistad enviada satisfactoriamente");
+            }
         });
     });
 
@@ -56,9 +60,11 @@ module.exports = function (app, swig, gestorDB) {
         gestorDB.getUsuarios(criterio, function (usuarios) {
             if (usuarios == null || usuarios.length == 0) {
                 req.session.usuario = null;
+                app.get('logger').error("Intento de login fallido.");
                 res.redirect("/login" + "?mensaje=Usuario o password incorrecto" + "&tipoMensaje=alert-danger ");
             } else {
                 req.session.usuario = usuarios[0];
+                app.get('logger').info("Usuario " + usuarios[0].username + " se ha logueado con éxito.");
                 res.redirect("/");
             }
         });
@@ -98,16 +104,20 @@ module.exports = function (app, swig, gestorDB) {
         }
         gestorDB.getUsuarios(criterio, function (usuarios) {
             if (req.body.password != req.body.passwordConfirm){
+                app.get('logger').error("Intento de registro inválido.");
                 res.redirect("/registro?mensaje=Las contraseñas no coinciden"+"&tipoError=pass");
             }
             else if (!(usuarios == null || usuarios.length == 0)) {
+                app.get('logger').error("Intento de registro inválido.");
                 res.redirect("/registro" + "?mensaje=Nombre de usuario o email ya existen" + "&tipoMensaje=alert-danger "+
                 "&tipoError=repe");
             }else{
                 gestorDB.addUsuario(usuario, function (id) {
                     if (id == null) {
+                        app.get('logger').error("Intento de registro inválido.");
                         res.redirect("/registro?mensaje=Error al registrar usuario" + "&tipoMensaje=alert-danger ");
                     } else {
+                        app.get('logger').info("Nuevo usuario con ID " + id + " registrado.");
                         res.redirect("/login?mensaje=Nuevo usuario registrado");
                     }
                 });
