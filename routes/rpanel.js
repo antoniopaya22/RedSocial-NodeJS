@@ -76,7 +76,7 @@ module.exports = function (app, swig, gestorDB) {
                         likes : likes,
                         numPosts : postsTotales.length,
                         numComentarios : numComentarios,
-                        numAmigos : amigos.length
+                        numAmigos : amigos.length -1
                     });
 
                     app.get('logger').trace("Usuario " + req.session.usuario.username + " ha accedido al panel");
