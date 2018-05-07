@@ -236,4 +236,268 @@ module.exports = function (app, gestorDB) {
             }
         });
     });
+
+
+    //==========RESET BBDD===============
+
+    app.get('/api/cargarBBDD',function (req,res) {
+        var rest = app.get("rest");
+        var mensaje = "";
+        //Promesas
+        var addUsuarios = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/usuarios?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "POST",
+                json: true,
+                body: [
+                    {
+                        "_id": {
+                            "$oid": "5af01066f707017eef52ac51"
+                        },
+                        "username": "Antonio",
+                        "email": "antonioalfa22@gmail.com",
+                        "password": "6fabd6ea6f1518592b7348d84a51ce97b87e67902aa5a9f86beea34cd39a6b4a",
+                        "nombre": "",
+                        "apellidos": "",
+                        "amigos": [
+                            "5af01066f707017eef52ac52",
+                            "5af01066f707017eef52ac53"
+                        ]
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af01066f707017eef52ac52"
+                        },
+                        "username": "Pablo",
+                        "email": "uo251017@uniovi.es",
+                        "password": "6fabd6ea6f1518592b7348d84a51ce97b87e67902aa5a9f86beea34cd39a6b4a",
+                        "nombre": "",
+                        "foto_perfil": "",
+                        "apellidos": "",
+                        "amigos": [
+                            "5af01066f707017eef52ac51",
+                            "5af01066f707017eef52ac55",
+                            "5af01066f707017eef52ac54"
+                        ]
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af01066f707017eef52ac53"
+                        },
+                        "username": "Laura",
+                        "email": "lauriarro@hotmail.com",
+                        "password": "775a6aef18e463f2505249750b052f6dba84e25c8b55c527c8997ff9991e5a9b",
+                        "nombre": "",
+                        "foto_perfil": "",
+                        "apellidos": "",
+                        "amigos": [
+                            "5af01066f707017eef52ac51"
+                        ]
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af01066f707017eef52ac54"
+                        },
+                        "username": "Prueba2",
+                        "email": "prueba2@prueba2.com",
+                        "password": "6fabd6ea6f1518592b7348d84a51ce97b87e67902aa5a9f86beea34cd39a6b4a",
+                        "nombre": "",
+                        "foto_perfil": "",
+                        "apellidos": "",
+                        "amigos": [
+                            "5af01066f707017eef52ac52"
+                        ]
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af01066f707017eef52ac55"
+                        },
+                        "username": "Prueba1",
+                        "email": "prueba1@prueba1.com",
+                        "password": "6fabd6ea6f1518592b7348d84a51ce97b87e67902aa5a9f86beea34cd39a6b4a",
+                        "nombre": "",
+                        "foto_perfil": "",
+                        "apellidos": "",
+                        "amigos": [
+                            "5af01066f707017eef52ac52"
+                        ]
+                    }
+                ]
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al insertar los usuarios"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        var addPost = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/publicaciones?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "POST",
+                json: true,
+                body: [
+                    {
+                        "_id": {
+                            "$oid": "5af011a9f2967136fc490168"
+                        },
+                        "titulo": "Articulo de Ejemplo",
+                        "contenido": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "fecha": {
+                            "$date": "2018-05-07T08:43:20.795Z"
+                        },
+                        "autor": "Antonio",
+                        "tiene_foto": false,
+                        "comentarios": []
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af011b2f2967136fc490169"
+                        },
+                        "titulo": "Buenos dias",
+                        "contenido": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "fecha": {
+                            "$date": "2018-05-07T08:43:30.446Z"
+                        },
+                        "autor": "Antonio",
+                        "tiene_foto": false,
+                        "comentarios": []
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af011d0f2967136fc49016a"
+                        },
+                        "titulo": "Puedes crear Publicaciones con imágenes",
+                        "contenido": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "fecha": {
+                            "$date": "2018-05-07T08:44:00.227Z"
+                        },
+                        "autor": "Pablo",
+                        "tiene_foto": false,
+                        "comentarios": []
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af011f0f2967136fc49016b"
+                        },
+                        "titulo": "Solo se muestran las publicaciones de tus amigos",
+                        "contenido": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "fecha": {
+                            "$date": "2018-05-07T08:44:32.374Z"
+                        },
+                        "autor": "Laura",
+                        "tiene_foto": false,
+                        "comentarios": []
+                    },
+                    {
+                        "_id": {
+                            "$oid": "5af01201f2967136fc49016c"
+                        },
+                        "titulo": "Articulo de Ejemplo",
+                        "contenido": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                        "fecha": {
+                            "$date": "2018-05-07T08:44:49.235Z"
+                        },
+                        "autor": "Prueba1",
+                        "tiene_foto": false,
+                        "comentarios": []
+                    }
+                ]
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al insertar las publicaciones"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        //Callbacks
+        Promise.all([addUsuarios,addPost])
+            .then(mensaje += "Usuarios añadidos correctamente\n")
+            .then(mensaje += "Publicaciones añadidas correctamente\n")
+            .then(function () { res.status(200); res.json({mensaje: mensaje}); })
+            .catch(function (error) { res.status(500); res.json({error: error}); });
+    });
+
+    app.get('/api/vaciarBBDD',function (req,res) {
+        var rest = app.get("rest");
+        var mensaje = "";
+        //Promesas
+        var eliminarMensajes = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/mensajes?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "PUT",
+                json: true,
+                body: []
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al borrar los mensajes"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        var eliminarPost = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/publicaciones?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "PUT",
+                json: true,
+                body: []
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al borrar las publicaciones"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        var eliminarPeticiones = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/peticiones_amistad?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "PUT",
+                json: true,
+                body: []
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al borrar las peticiones de amistad"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        var eliminarUsuarios = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/usuarios?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "PUT",
+                json: true,
+                body: []
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al borrar los usuarios"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
+        // Callbacks
+        Promise.all([eliminarMensajes,eliminarPost,eliminarPeticiones,eliminarUsuarios])
+            .then(mensaje += "Mensajes eliminados correctamente\n")
+            .then(mensaje += "Post eliminados correctamente\n")
+            .then(mensaje += "Peticiones de amistad eliminadas correctamente\n")
+            .then(mensaje += "Usuarios eliminados correctamente\n")
+            .then(function () { res.status(200); res.json({mensaje: mensaje}); })
+            .catch(function (error) { res.status(500); res.json({error: error}); });
+    });
 };
