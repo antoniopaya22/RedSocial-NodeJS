@@ -1,6 +1,7 @@
 var assert = require("chai").assert;
 var app = require("../app");
 var request = require('request');
+var expect = require("chai").expect;
 
 describe("Test de comprobacion de URLS: ", function() {
 
