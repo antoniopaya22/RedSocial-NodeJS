@@ -60,6 +60,12 @@ module.exports = function (app, swig, gestorDB) {
                     x.autor = usuarios.find(function (y) {
                         return y.username == x.autor;
                     });
+
+                    x["dioLike"] = false;
+                    likes.forEach(function(like){
+                       if (x._id.toString() == like.toString())
+                           x["dioLike"] = true;
+                    });
                 });
 
                 gestorDB.getPost({ autor : req.session.usuario.username }, function(postsTotales, total){

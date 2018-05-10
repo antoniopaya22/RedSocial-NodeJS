@@ -261,6 +261,12 @@ module.exports = function (app, swig, gestorDB) {
             username : req.query.username
         };
 
+        // Array de likes dados a publicaciones
+        var likes = req.session.usuario.likes;
+
+        if (likes == null)
+            likes = [];
+
         gestorDB.getUsuarios(criterio, function (usuarios) {
             if (usuarios == null || usuarios.length == 0) {
                 res.redirect("/" + "?mensaje=No existe ese usuario" + "&tipoMensaje=alert-danger "+
@@ -271,6 +277,12 @@ module.exports = function (app, swig, gestorDB) {
                     if(post != null){
                         post.forEach(function(x) {
                             x.autor = usuario;
+
+                            x["dioLike"] = false;
+                            likes.forEach(function(like){
+                                if (x._id.toString() == like.toString())
+                                    x["dioLike"] = true;
+                            });
                         });
                     }
                     var respuesta = swig.renderFile('views/users/bperfil.html', {
@@ -432,4 +444,71 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
+    /**
+     * POST: Dar like a publicación
+     */
+    app.post("/users/darLike", function(req, res){
+        var id_enviador_like = req.session.usuario._id.toString();
+        var id_post = req.body.like;
+
+        var criterio = { _id: gestorDB.mongo.ObjectID(id_enviador_like) };
+
+        var likes = req.session.usuario.likes;
+        if (likes == null)
+            likes = [];
+
+        likes.push( id_post );
+
+        req.session.usuario.likes = likes;
+
+        var nuevo_usuario = {
+            likes : likes
+        };
+
+        gestorDB.updateUsuarios(criterio, nuevo_usuario, function (id) {
+            if (id == null) {
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al actualizar tus datos"
+                });
+                res.send(respuesta);
+            } else {
+                res.redirect("/panel");
+            }
+        });
+    });
+
+    /**
+     * POST: Quitar like a publicación
+     */
+    app.post("/users/quitarLike", function(req, res){
+        var id_enviador_like = req.session.usuario._id.toString();
+        var id_post = req.body.like;
+
+        var criterio = { _id: gestorDB.mongo.ObjectID(id_enviador_like) };
+
+        var likes = req.session.usuario.likes;
+        if (likes == null)
+            likes = [];
+
+        likes.pop( id_post );
+
+        req.session.usuario.likes = likes;
+
+        var nuevo_usuario = {
+            likes : likes
+        };
+
+        gestorDB.updateUsuarios(criterio, nuevo_usuario, function (id) {
+            if (id == null) {
+                var respuesta = swig.renderFile('views/error.html', {
+                    error: "Error 500",
+                    mensaje: "Error al actualizar tus datos"
+                });
+                res.send(respuesta);
+            } else {
+                res.redirect("/panel");
+            }
+        });
+    });
 };

@@ -35,11 +35,23 @@ module.exports = function (app, swig, gestorDB, fs) {
     app.get('/post/list', function(req, res) {
         var criterio = { autor : req.session.usuario.username };
 
+        // Array de likes dados a publicaciones
+        var likes = req.session.usuario.likes;
+
+        if (likes == null)
+            likes = [];
+
         gestorDB.getPost(criterio,function(post){
             gestorDB.getUsuarios({}, function (usuarios) {
                 post.forEach(function(x) {
                     x.autor = usuarios.find(function (y) {
                         return y.username == x.autor;
+                    });
+
+                    x["dioLike"] = false;
+                    likes.forEach(function(like){
+                        if (x._id.toString() == like.toString())
+                            x["dioLike"] = true;
                     });
                 });
                 var respuesta = swig.renderFile('views/post/blist.html', {
@@ -106,12 +118,25 @@ module.exports = function (app, swig, gestorDB, fs) {
     app.get('/post/publicacion/:id', function(req, res) {
         var criterio = {"_id": gestorDB.mongo.ObjectId(req.params.id)};
 
+        // Array de likes dados a publicaciones
+        var likes = req.session.usuario.likes;
+
+        if (likes == null)
+            likes = [];
+
         gestorDB.getPost(criterio,function(post){
             gestorDB.getUsuarios({}, function (usuarios) {
                 post.forEach(function(x) {
                     x.autor = usuarios.find(function (y) {
                         return y.username == x.autor;
                     });
+
+                });
+
+                post[0]["dioLike"] = false;
+                likes.forEach(function(like){
+                    if (post[0]._id.toString() == like.toString())
+                        post[0]["dioLike"] = true;
                 });
                 var respuesta = swig.renderFile('views/post/bpost.html', {
                     post : post[0],
