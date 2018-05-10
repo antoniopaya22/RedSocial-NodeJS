@@ -22,7 +22,7 @@ describe("Test de comprobacion de URLS: ", function() {
         });
         it('Test registro - "/registro devuelve pagina Registro', function(){
             request('http://localhost:8081/registro', function(error, response, body) {
-                expect(body).to.equal('Regístrate');
+                expect(body).to.equal('Registro');
             });
         });
     });
