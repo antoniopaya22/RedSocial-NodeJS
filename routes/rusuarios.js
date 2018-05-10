@@ -45,7 +45,7 @@ module.exports = function (app, swig, gestorDB) {
             } else {
                 req.session.usuario = usuarios[0];
                 app.get('logger').info("Usuario " + usuarios[0].username + " se ha logueado con éxito.");
-                res.redirect("/users/lista-usuarios");
+                res.redirect("/");
             }
         });
     });
