@@ -99,7 +99,7 @@ module.exports = function (app, swig, gestorDB) {
         var criterio = {
             $or: [
                 {username: req.body.username},
-                {email: req.body.username}
+                {email: req.body.email}
             ]
         }
         gestorDB.getUsuarios(criterio, function (usuarios) {
