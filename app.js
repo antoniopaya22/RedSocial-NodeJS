@@ -108,7 +108,6 @@ routerUsuarioSession.use(function (req, res, next) {
 app.use("/users/*", routerUsuarioSession);
 app.use("/post/*", routerUsuarioSession);
 app.use("/panel", routerUsuarioSession);
-app.use("/chat", routerUsuarioSession);
 
 
 //==========RUTAS================
@@ -143,6 +142,7 @@ app.get('*', function(req, res){
         error: "Error 404 Page not found",
         mensaje: "La página "+req.url+" no existe"
     });
+    res.status(404);
     res.send(respuesta);
 });
 
