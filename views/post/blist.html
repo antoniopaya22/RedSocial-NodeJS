@@ -74,6 +74,7 @@
                      alt="Imagen del post">
                 {% endif %}
                 <ul class="post-utility">
+
                     <!-- Si no dio like -->
                     {% if p.dioLike == false %}
                     <form action="/users/darLike" method="post">
@@ -88,17 +89,19 @@
                     {% else %}
                     <form action="/users/quitarLike" method="post">
                         <input type="hidden" name="like" value="{{ p._id.toString() }}" />
-                        <button class="btn btn-outline-primary">
+                        <button class="btn btn-success">
                             <li class="likes"><i
-                                    class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
+                                    class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:white"></i>
                                 <span>Te gusta este post</span></li>
                         </button>
                     </form>
                     {% endif %}
-                    <button class="btn btn-outline-primary">
+
+                    <button class="btn btn-light">
                         <li class="shares"><a href="/post/publicacion/{{ p._id.toString() }}"><i
-                                class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
+                                class="fa fa-fw fa-lg fa-comments"></i> <span style="color:gray">Comentar</span></a>
                         </li>
+
                     </button>
                     <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>{{ p.comentarios.length }}</span>
                         <span>Comentarios</span></li>

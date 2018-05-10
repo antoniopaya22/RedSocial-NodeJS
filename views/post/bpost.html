@@ -65,10 +65,11 @@
                      alt="Imagen del post">
                 {% endif %}
                 <ul class="post-utility">
+
                     <!-- Si no dio like -->
                     {% if post.dioLike == false %}
                     <form action="/users/darLike" method="post">
-                        <input type="hidden" name="like" value="{{ p._id.toString() }}" />
+                        <input type="hidden" name="like" value="{{ post._id.toString() }}" />
                         <button type="submit" class="btn btn-outline-primary">
                             <li class="likes">
                                 <i class="fa fa-fw fa-lg fa-thumbs-o-up"></i><span>Like</span>
@@ -78,19 +79,22 @@
                     <!-- Si dio like -->
                     {% else %}
                     <form action="/users/quitarLike" method="post">
-                        <input type="hidden" name="like" value="{{ p._id.toString() }}" />
-                        <button class="btn btn-outline-primary">
+                        <input type="hidden" name="like" value="{{ post._id.toString() }}" />
+                        <button class="btn btn-success">
                             <li class="likes"><i
-                                    class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:blue"></i>
+                                    class="fa fa-fw fa-lg fa-thumbs-o-up" style="color:white"></i>
                                 <span>Te gusta este post</span></li>
                         </button>
                     </form>
                     {% endif %}
-                    <button class="btn btn-outline-primary">
-                        <li class="shares"><a href="/post/publicacion/{{ p._id.toString() }}"><i
-                                class="fa fa-fw fa-lg fa-comments"></i> Comentar</a>
+
+                    <button class="btn btn-light">
+                        <li class="shares"><a href="/post/publicacion/{{ post._id.toString() }}"><i
+                                class="fa fa-fw fa-lg fa-comments"></i> <span style="color:gray">Comentar</span></a>
                         </li>
+
                     </button>
+
                     <li class="comments"><i class="fa fa-fw fa-lg fa-comment-o"></i> <span>{{ post.comentarios.length }}</span>
                         <span>Comentarios</span></li>
                 </ul>
