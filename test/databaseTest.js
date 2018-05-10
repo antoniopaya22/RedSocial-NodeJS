@@ -8,12 +8,12 @@ describe("Database tests - Comprobación de campos no vacíos: ", function() {
     describe ('Reset BBDD', function() {
         it('Test resetBBDD - status 200', function(){
             request('http://localhost:8081/api/vaciarBBDD', function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
+                expect(response.statusCode).to.deep.equal(200);
             });
         });
         it('Test cargarBBDD - status 200', function(){
             request('http://localhost:8081/api/cargarBBDD', function(error, response, body) {
-                expect(response.statusCode).to.equal(200);
+                expect(response.statusCode).to.deep.equal(200);
             });
         });
     });
