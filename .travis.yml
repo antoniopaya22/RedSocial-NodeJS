@@ -1,6 +1,10 @@
 language: node_js
 node_js: "node"
-services: mongodb
+install:
+  - npm install -g codecov
+script:
+  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
+  - codecov
 cache:
   directories:
     - "node_modules"
