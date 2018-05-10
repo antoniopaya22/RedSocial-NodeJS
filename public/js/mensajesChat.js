@@ -1,7 +1,7 @@
 var amigos;
 var chatActivo;
 var nuevoMensaje = false; // para pasar a un usuario de la lista de amigos a la cabeza, cuando
-                            // se le envia un mensaje
+// se le envia un mensaje
 
 
 /**
@@ -99,9 +99,9 @@ function actualizarVistaUsuarios(usuarios) {
         if(mensajesNoLeidos > 0){
             cadena +=
                 "<i class='fa fa-circle offline'></i>" + mensajesNoLeidos+ " mensajes sin leer"
-                "</div>" +
-                "</div>" +
-                "</li>";
+            "</div>" +
+            "</div>" +
+            "</li>";
         }else{
             cadena +=
                 "<i class='fa fa-circle online'></i> Todos leídos" +
@@ -143,7 +143,7 @@ function cambiarChat(username) {
     $("#tituloUsuarioChat").text(chatActivo.username);
     $("#listaMensajes").empty();
     $("#numMensajes").text("Hay "+chatActivo.mensajes.length+" mensajes en la conversación");
-    
+
     actualizarMensajes(chatActivo.mensajes);
     document.getElementById('div_listaMensajes').scrollBy(0, 1000);
 }
@@ -159,7 +159,7 @@ function actualizarChatActual(mensajesAnteriores) {
         actualizarMensajes(chatActivo.mensajes.filter(function (x) {
             var flag = true;
             mensajesAnteriores.forEach(function (y) {
-               if(y._id == x._id) flag = false;
+                if(y._id == x._id) flag = false;
             })
             return flag;
         }));

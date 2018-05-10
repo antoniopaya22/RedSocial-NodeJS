@@ -415,10 +415,64 @@ module.exports = function (app, gestorDB) {
             });
         });
 
+        var addMensajes = new Promise(function (resolve,reject) {
+            var configuracion = {
+                url: "https://api.mlab.com/api/1/databases/redsocial/collections/mensajes?apiKey=_yZ4rl7WvTGfsWtSCYtj2RBWur5qbOck",
+                method: "POST",
+                json: true,
+                body: [
+                    {
+                        "contenido": "Hola Antonio Dios de los mortales",
+                        "fecha": {
+                            "$date": "2018-05-09T19:08:12.934Z"
+                        },
+                        "emisor": {
+                            "_id": "5af01066f707017eef52ac52",
+                            "username": "Pablo"
+                        },
+                        "destino": "5af01066f707017eef52ac51",
+                        "leido": true
+                    },
+                    {
+                        "contenido": "Que tal todo",
+                        "fecha": {
+                            "$date": "2018-05-09T19:10:12.934Z"
+                        },
+                        "emisor": {
+                            "_id": "5af01066f707017eef52ac52",
+                            "username": "Pablo"
+                        },
+                        "destino": "5af01066f707017eef52ac51",
+                        "leido": true
+                    },
+                    {
+                        "contenido": "Pues muy bien, probando el chat",
+                        "fecha": {
+                            "$date": "2018-05-09T19:12:12.934Z"
+                        },
+                        "emisor": {
+                            "_id": "5af01066f707017eef52ac51",
+                            "username": "Antonio"
+                        },
+                        "destino": "5af01066f707017eef52ac52",
+                        "leido": true
+                    }
+                ]
+            };
+            rest(configuracion,function (error,response,body) {
+                if(error != null){
+                    reject(new Error("Error al insertar los mensajes"));
+                }else{
+                    resolve();
+                }
+            });
+        });
+
         //Callbacks
-        Promise.all([addUsuarios,addPost])
+        Promise.all([addUsuarios,addPost,addMensajes])
             .then(mensaje += "Usuarios añadidos correctamente\n")
             .then(mensaje += "Publicaciones añadidas correctamente\n")
+            .then(mensaje += "Mensajes añadidos correctamente\n")
             .then(function () { res.status(200); res.json({mensaje: mensaje}); })
             .catch(function (error) { res.status(500); res.json({error: error}); });
     });
