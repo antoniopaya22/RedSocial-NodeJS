@@ -8,7 +8,7 @@ describe("Test de comprobacion de errores: ", function() {
     describe ('Error 404', function() {
         it('Test error 404 - "/absf" devuelve pagina error 404', function(){
             request('http://localhost:8081/absf', function(error, response, body) {
-                expect(body).to.deep.equal('Error 404 Page not found');
+                expect(body).to.include('Error 404 Page not found');
             });
         });
     });
