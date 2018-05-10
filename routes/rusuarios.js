@@ -24,26 +24,6 @@ module.exports = function (app, swig, gestorDB) {
         var respuesta = swig.renderFile('views/login.html', {});
         res.send(respuesta);
     });
-    /*
-        POST: Enviar petición
-    */
-    app.post("/users/enviarAmistad", function(req, res){
-        var peticion = {
-            "id_enviador" : req.session.usuario._id,
-            "id_recibidor" : req.body.peticion
-        };
-
-        gestorDB.addPeticionAmistad( peticion, function(id){
-            if (id == null)
-                res.redirect("/users/lista-usuarios?mensaje=Error al enviar la petición de amistad");
-            else
-            {
-                app.get('logger').info("Usuario " + req.session.usuario.username + " ha enviado una petición de amistad" +
-                    " al usuario con ID " + id);
-                res.redirect("/users/lista-usuarios?mensaje=Petición de amistad enviada satisfactoriamente");
-            }
-        });
-    });
 
     /*
         POST: Login
@@ -65,7 +45,7 @@ module.exports = function (app, swig, gestorDB) {
             } else {
                 req.session.usuario = usuarios[0];
                 app.get('logger').info("Usuario " + usuarios[0].username + " se ha logueado con éxito.");
-                res.redirect("/");
+                res.redirect("/users/lista-usuarios");
             }
         });
     });
@@ -99,7 +79,7 @@ module.exports = function (app, swig, gestorDB) {
         var criterio = {
             $or: [
                 {username: req.body.username},
-                {email: req.body.username}
+                {email: req.body.email}
             ]
         }
         gestorDB.getUsuarios(criterio, function (usuarios) {
@@ -320,6 +300,29 @@ module.exports = function (app, swig, gestorDB) {
         });
     });
 
+    //========== PETICIONES DE AMISTAD =============
+
+    /**
+    *    POST: Enviar petición
+    **/
+    app.post("/users/enviarAmistad", function(req, res){
+        var peticion = {
+            "id_enviador" : req.session.usuario._id,
+            "id_recibidor" : req.body.peticion
+        };
+
+        gestorDB.addPeticionAmistad( peticion, function(id){
+            if (id == null)
+                res.redirect("/users/lista-usuarios?mensaje=Error al enviar la petición de amistad");
+            else
+            {
+                app.get('logger').info("Usuario " + req.session.usuario.username + " ha enviado una petición de amistad" +
+                    " al usuario con ID " + id);
+                res.redirect("/users/lista-usuarios?mensaje=Petición de amistad enviada satisfactoriamente");
+            }
+        });
+    });
+
     /**
      * GET: Listar peticiones de amistad
      */
@@ -443,6 +446,8 @@ module.exports = function (app, swig, gestorDB) {
             }
         });
     });
+
+    //========== LIKES =============
 
     /**
      * POST: Dar like a publicación
