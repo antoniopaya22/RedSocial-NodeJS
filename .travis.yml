@@ -1,9 +1,10 @@
 language: node_js
 node_js: "node"
 install:
-  - npm install istanbul
+  - npm install -g istanbul mocha@3
   - npm install -g codecov
 script:
+  - istanbul cover ./node_modules/mocha/bin/_mocha --reporter lcovonly -- -R spec
   - codecov
 cache:
   directories:
